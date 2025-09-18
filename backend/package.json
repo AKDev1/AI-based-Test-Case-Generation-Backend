@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^7.17.1",
+    "@google/genai": "^1.20.0",
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "file-type": "^16.5.4",
+    "mime-type": "^5.0.3",
+    "mime-types": "^3.0.1",
+    "mongoose": "^8.18.1",
+    "multer": "^2.0.2",
+    "undici": "^7.16.0"
+  }
+}
