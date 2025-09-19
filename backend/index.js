@@ -1,39 +1,40 @@
 // backend/index.js
-// const { fetch, Headers, Request, Response, FormData, Blob } = require('undici');
-
-// // Polyfill globals expected by SDK
-// if (typeof globalThis.fetch !== 'function') globalThis.fetch = fetch;
-// if (typeof globalThis.Headers === 'undefined') globalThis.Headers = Headers;
-// if (typeof globalThis.Request === 'undefined') globalThis.Request = Request;
-// if (typeof globalThis.Response === 'undefined') globalThis.Response = Response;
-// if (typeof globalThis.FormData === 'undefined') globalThis.FormData = FormData;
-// if (typeof globalThis.Blob === 'undefined') globalThis.Blob = Blob;
+// CommonJS style. If packages are ESM-only, set "type":"module" and convert imports.
 
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
-const FileType = require('file-type'); 
-const mime = require('mime-types'); 
 const path = require("path");
-const { GoogleGenAI } = require("@google/genai");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const mime = require("mime-types");
 const dotenv = require("dotenv");
 
 dotenv.config();
+
+// Try to require the libs you specified (may throw if ESM-only)
+let genkit, googleAIPlugin, GoogleAIFileManager;
+try {
+  genkit = require("genkit");
+  googleAIPlugin = require("@genkit-ai/googleai").googleAI || require("@genkit-ai/googleai");
+  GoogleAIFileManager = require("@google/generative-ai/server").GoogleAIFileManager || require("@google/generative-ai").GoogleAIFileManager || require("@google/generative-ai/server");
+} catch (e) {
+  console.warn("One or more SDK libraries couldn't be required. Make sure they are installed and compatible with CommonJS. Error:", e.message);
+  // We'll still continue — but uploads will fail if the class isn't available.
+}
 
 const PORT = process.env.PORT || 5000;
 const UPLOAD_DIR = path.join(__dirname, "uploads");
 const STANDARDS_DB = path.join(__dirname, "standards.json");
 
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR);
+if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
-// simple persistent store for filename -> fileUri
+// tiny JSON store
 function readStandards() {
   try {
     if (!fs.existsSync(STANDARDS_DB)) return {};
     return JSON.parse(fs.readFileSync(STANDARDS_DB, "utf8") || "{}");
-  } catch {
+  } catch (e) {
+    console.error("readStandards error:", e);
     return {};
   }
 }
@@ -41,101 +42,109 @@ function writeStandards(obj) {
   fs.writeFileSync(STANDARDS_DB, JSON.stringify(obj, null, 2), "utf8");
 }
 
-// Multer for file uploads
+// multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
+  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 });
 const upload = multer({ storage });
 
-// Express app
+// express
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Google GenAI client
-const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
-const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// Upload helper
-/**
- * Robust upload using @google/genai SDK.
- * Places the size under config.file.sizeBytes (server expects file.size_bytes).
- */
-async function uploadFileToGemini(localFilePath, originalName) {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error('GEMINI_API_KEY not set in .env');
-  }
-
-  // determine mime and size
-  const mimeType = mime.lookup(originalName) || 'application/octet-stream';
-  let sizeBytes;
-  try {
-    const stat = fs.statSync(localFilePath);
-    sizeBytes = stat.size;
-  } catch (e) {
-    console.warn('[upload] could not stat file:', e.message);
-  }
-  console.log('[upload] derived mimeType=', mimeType, 'sizeBytes=', sizeBytes);
-
-  const fileStream = fs.createReadStream(localFilePath);
-  const fileBuffer = fs.readFileSync(localFilePath);
-
-  // IMPORTANT: put size under config.file.sizeBytes (server wants file.size_bytes)
-  const config = {
-    displayName: originalName,
-    size: sizeBytes,
-    mimeType: mimeType,
-  };
-
-  try {
-    console.log('[upload] calling ai.files.upload with config.file keys:', Object.keys(config));
-    const uploaded = await ai.files.upload({
-      file: fileStream,
-      config
+// init genkit + plugin (mirrors screenshot)
+const API_KEY = process.env.GEMINI_API_KEY;
+let ai = null;
+try {
+  if (genkit && googleAIPlugin) {
+    ai = genkit({
+      plugins: [
+        googleAIPlugin({
+          apiKey: API_KEY
+        })
+      ],
     });
-
-    console.log('[upload] uploaded object:', JSON.stringify(uploaded, null, 2));
-
-    // extract URI
-    const fileUri = uploaded?.file?.uri || uploaded?.uri || uploaded?.name || uploaded?.resourceName || null;
-    if (!fileUri) {
-      console.warn('[upload] no fileUri found in response; full response logged above');
-      throw new Error('Upload succeeded but no fileUri found in SDK response');
-    }
-
-    return { fileUri, uploaded };
-  } catch (err) {
-    // log detailed error payload if present
-    console.error('[upload] Gemini upload failed:', err?.response?.data || err?.message || err);
-    // Optional: fallback to direct multipart upload (uncomment if you want)
-    // return await directMultipartUpload(localFilePath, originalName);
-    throw err;
+    console.log("genkit initialized with googleAI plugin");
+  } else {
+    console.warn("genkit/googleAI plugin not available. ai will be null.");
   }
+} catch (e) {
+  console.warn("Failed to initialize genkit:", e.message);
 }
 
+// create fileManager instance if class exists (matches screenshot usage)
+let fileManager = null;
+try {
+  if (GoogleAIFileManager) {
+    fileManager = new GoogleAIFileManager(API_KEY);
+    console.log("GoogleAIFileManager initialized");
+  } else {
+    console.warn("GoogleAIFileManager not available.");
+  }
+} catch (e) {
+  console.warn("Failed to create GoogleAIFileManager:", e.message);
+}
+
+// Helper: use the screenshot-style upload API: fileManager.uploadFile(path, { mimeType, displayName })
+async function uploadFileUsingManager(localPath, originalName) {
+  if (!fileManager || typeof fileManager.uploadFile !== "function") {
+    throw new Error("fileManager.uploadFile not available (check package exports / module type)");
+  }
+
+  const mimeType = mime.lookup(originalName) || "application/octet-stream";
+  // Call the upload method as shown in your reference image
+  const res = await fileManager.uploadFile(localPath, { mimeType, displayName: originalName });
+  return { res, mimeType };
+}
 
 // POST /upload
 app.post("/upload", upload.single("standardFile"), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: "No file provided" });
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
     const localPath = req.file.path;
     const originalName = req.file.originalname;
 
-    const { fileUri, uploaded } = await uploadFileToGemini(localPath, originalName);
+    console.log("Received upload:", originalName, localPath);
 
-    if (!fileUri) return res.status(500).json({ error: "Gemini did not return fileUri", uploaded });
+    // Use the manager upload (as in screenshot)
+    let uploadedInfo;
+    try {
+      const { res: uploadResult, mimeType } = await uploadFileUsingManager(localPath, originalName);
+      uploadedInfo = { uploadResult, mimeType };
+      console.log("UploadResult:", uploadResult);
+    } catch (sdkErr) {
+      console.error("Upload via GoogleAIFileManager failed:", sdkErr && sdkErr.message);
+      // return error — user asked to keep the screenshot usage; don't auto-fallback here
+      return res.status(500).json({ error: "SDK upload failed", details: String(sdkErr?.message || sdkErr) });
+    }
 
+    // extract fileUri from common shapes
+    const uploaded = uploadedInfo.uploadResult || {};
+    const fileUri =
+      uploaded?.file?.uri ||
+      uploaded?.file?.url ||
+      uploaded?.uri ||
+      uploaded?.name ||
+      uploaded?.resourceName ||
+      null;
+
+    // persist mapping
     const map = readStandards();
-    map[originalName] = { fileUri, uploadedAt: new Date().toISOString() };
+    map[originalName] = { fileUri: fileUri || null, uploadedAt: new Date().toISOString(), raw: uploaded };
     writeStandards(map);
 
-    fs.unlinkSync(localPath); // cleanup
+    // cleanup temp file
+    try { fs.unlinkSync(localPath); } catch (e) { /* ignore */ }
 
+    if (!fileUri) {
+      return res.status(200).json({ message: "Uploaded but no fileUri in SDK response", raw: uploaded });
+    }
     res.json({ filename: originalName, fileUri });
   } catch (err) {
-    console.error("Upload error:", err);
+    console.error("Upload route error:", err);
     res.status(500).json({ error: "Upload failed", details: String(err) });
   }
 });
@@ -143,11 +152,9 @@ app.post("/upload", upload.single("standardFile"), async (req, res) => {
 // GET /standards
 app.get("/standards", (req, res) => {
   const map = readStandards();
-  const simplified = {};
-  for (const [name, val] of Object.entries(map)) {
-    simplified[name] = val.fileUri || val;
-  }
-  res.json(simplified);
+  const out = {};
+  for (const [k, v] of Object.entries(map)) out[k] = v.fileUri || null;
+  res.json(out);
 });
 
 // POST /summarize
@@ -159,31 +166,36 @@ app.post("/summarize", async (req, res) => {
     }
 
     const map = readStandards();
-    const fileUris = selectedStandards.map(name => map[name]?.fileUri).filter(Boolean);
-    if (fileUris.length === 0) return res.status(400).json({ error: "No fileUris found" });
+    const fileUris = selectedStandards.map(n => map[n]?.fileUri).filter(Boolean);
+    if (fileUris.length === 0) return res.status(400).json({ error: "No fileUris found for selected standards" });
 
+    // Build prompt parts like the screenshot: text then media parts
     const parts = [
-      ...fileUris.map(uri => ({ file_data: { file_uri: uri } })),
-      { text: prompt }
+      { text: prompt },
+      ...fileUris.map(uri => ({ media: { contentType: "application/pdf", url: uri } }))
     ];
 
-    const resp = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [{ role: "user", parts }]
+    // calling ai.generate similar to screenshot usage
+    if (!ai) return res.status(500).json({ error: "AI client not initialized (genkit/googleAI plugin missing)" });
+
+    // in screenshot they used: const { text } = await ai.generate({ model: googleAI.model("gemini-2.5-flash"), prompt: [ ... ] })
+    // we'll attempt the same call shape:
+    const model = googleAIPlugin ? googleAIPlugin.model("gemini-2.5-flash") : "gemini-2.5-flash";
+    const genResp = await ai.generate({
+      model,
+      prompt: parts
     });
 
-    const summary = resp?.text
-      || resp?.candidates?.[0]?.content?.parts?.[0]?.text
-      || JSON.stringify(resp);
+    // extract response text
+    const text = genResp?.text || genResp?.output || genResp?.candidates?.[0]?.content?.parts?.[0]?.text || JSON.stringify(genResp);
 
-    res.json({ summary });
+    res.json({ summary: text, raw: genResp });
   } catch (err) {
     console.error("Summarize error:", err);
     res.status(500).json({ error: "Summarization failed", details: String(err) });
   }
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });

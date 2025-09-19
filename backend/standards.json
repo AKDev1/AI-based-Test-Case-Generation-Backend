@@ -1,0 +1,21 @@
+{
+  "Gemini_Generated_Image_lh62h1lh62h1lh62.png": {
+    "fileUri": "https://generativelanguage.googleapis.com/v1beta/files/d6v4h27avq4m",
+    "uploadedAt": "2025-09-19T11:34:29.583Z",
+    "raw": {
+      "file": {
+        "name": "files/d6v4h27avq4m",
+        "displayName": "Gemini_Generated_Image_lh62h1lh62h1lh62.png",
+        "mimeType": "image/png",
+        "sizeBytes": "759071",
+        "createTime": "2025-09-19T11:34:29.979748Z",
+        "updateTime": "2025-09-19T11:34:29.979748Z",
+        "expirationTime": "2025-09-21T11:34:29.736799118Z",
+        "sha256Hash": "YmY0NGQ1M2JlNmE0Nzg2NDRhODliNWI4Mzk0MzVhZjcyOTY4Zjk0MTE1N2M3MWVmODJmZTBiNDFjNmI2NGE2OA==",
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/d6v4h27avq4m",
+        "state": "ACTIVE",
+        "source": "UPLOADED"
+      }
+    }
+  }
+}
