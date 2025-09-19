@@ -8,19 +8,11 @@ const fs = require("fs");
 const path = require("path");
 const mime = require("mime-types");
 const dotenv = require("dotenv");
+const { genkit, z } = require("genkit");
+const { googleAI } = require("@genkit-ai/googleai");
+const { GoogleAIFileManager }= require("@google/generative-ai/server");
 
 dotenv.config();
-
-// Try to require the libs you specified (may throw if ESM-only)
-let genkit, googleAIPlugin, GoogleAIFileManager;
-try {
-  genkit = require("genkit");
-  googleAIPlugin = require("@genkit-ai/googleai").googleAI || require("@genkit-ai/googleai");
-  GoogleAIFileManager = require("@google/generative-ai/server").GoogleAIFileManager || require("@google/generative-ai").GoogleAIFileManager || require("@google/generative-ai/server");
-} catch (e) {
-  console.warn("One or more SDK libraries couldn't be required. Make sure they are installed and compatible with CommonJS. Error:", e.message);
-  // We'll still continue — but uploads will fail if the class isn't available.
-}
 
 const PORT = process.env.PORT || 5000;
 const UPLOAD_DIR = path.join(__dirname, "uploads");
@@ -58,13 +50,16 @@ app.use(express.json());
 const API_KEY = process.env.GEMINI_API_KEY;
 let ai = null;
 try {
-  if (genkit && googleAIPlugin) {
+  if (genkit && googleAI) {
     ai = genkit({
       plugins: [
-        googleAIPlugin({
+        googleAI({
           apiKey: API_KEY
-        })
+        }),
       ],
+      model: googleAI.model("gemini-2.5-flash", {
+        temperature: 0.8
+      }),
     });
     console.log("genkit initialized with googleAI plugin");
   } else {
@@ -180,7 +175,7 @@ app.post("/summarize", async (req, res) => {
 
     // in screenshot they used: const { text } = await ai.generate({ model: googleAI.model("gemini-2.5-flash"), prompt: [ ... ] })
     // we'll attempt the same call shape:
-    const model = googleAIPlugin ? googleAIPlugin.model("gemini-2.5-flash") : "gemini-2.5-flash";
+    const model = googleAI ? googleAI.model("gemini-2.5-flash") : "gemini-2.5-flash";
     const genResp = await ai.generate({
       model,
       prompt: parts
