@@ -1,0 +1,177 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TC-1",
+    "req_id": "REQ-1758475546374",
+    "jira_id": "",
+    "title": "Verify user can securely access the MediTrack system via login",
+    "preconditions": [
+      "A test user account with valid credentials (username, password) is created for MediTrack.",
+      "The MediTrack application is deployed and accessible."
+    ],
+    "steps": [
+      "1. Navigate to the MediTrack application's login URL.",
+      "2. Enter a valid username in the username field.",
+      "3. Enter the corresponding valid password in the password field.",
+      "4. Click the 'Login' button or equivalent action."
+    ],
+    "expected": "The user is successfully authenticated and redirected to the MediTrack system's main dashboard or an authorized landing page, indicating successful secure access.",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright",
+    "confidence": 0.1,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-2",
+    "req_id": "REQ-1758475546374",
+    "jira_id": "",
+    "title": "Verify basic information display and navigation within MediTrack",
+    "preconditions": [
+      "User is successfully logged into the MediTrack system with appropriate permissions to view data.",
+      "Sample data (e.g., patient records) exists within the system."
+    ],
+    "steps": [
+      "1. From the main dashboard, attempt to navigate to a primary data viewing section (e.g., 'Patient List', 'Reports', 'Dashboard').",
+      "2. Observe the displayed content within that section.",
+      "3. Attempt to return to the main dashboard or navigate to another primary section."
+    ],
+    "expected": "The system displays relevant information clearly and without errors. Navigation between primary sections is functional and responsive, reflecting a basic operational state for a 'MediTrack' system.",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright",
+    "confidence": 0.1,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-3",
+    "req_id": "REQ-1758475546374",
+    "jira_id": "",
+    "title": "Verify no Protected Health Information (PHI) is inadvertently exposed in public-facing interfaces or unauthenticated access",
+    "preconditions": [
+      "The MediTrack application is accessible.",
+      "Network monitoring tools (e.g., browser developer tools, proxy) are available."
+    ],
+    "steps": [
+      "1. Access the MediTrack application URL without logging in.",
+      "2. Examine the page source, network requests, and responses for any unprotected PHI or sensitive patient data.",
+      "3. Attempt to access common public or unauthenticated endpoints (e.g., 'about', 'contact', error pages) and inspect their content and network traffic.",
+      "4. Attempt to access known application endpoints that typically require authentication, observing the error or redirection behavior."
+    ],
+    "expected": "No Protected Health Information (PHI) or sensitive patient data is discoverable or exposed to unauthenticated users or in public-facing parts of the application, consistent with HIPAA privacy principles.",
+    "automatable": false,
+    "suggested_tool": "Manual, Burp Suite, OWASP ZAP",
+    "confidence": 0.2,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-4",
+    "req_id": "REQ-1758475546374",
+    "jira_id": "",
+    "title": "Verify system audit logs record critical user actions and data access attempts",
+    "preconditions": [
+      "User is logged into the MediTrack system with a test account.",
+      "Administrative access to the system's audit logs is available."
+    ],
+    "steps": [
+      "1. As a test user, perform a series of actions within MediTrack, such as viewing a patient record, attempting to modify data (even if permission is denied), and logging out.",
+      "2. Log in as an administrator (or equivalent) and access the system's audit logs.",
+      "3. Review the audit logs for records corresponding to the actions performed by the test user."
+    ],
+    "expected": "All critical user actions, particularly those involving access, modification attempts, or significant events related to patient data, are accurately recorded in the audit logs, including timestamps, user identifiers, and action details, in compliance with HIPAA's audit control requirements.",
+    "automatable": false,
+    "suggested_tool": "Manual, Log Analysis Tools (e.g., Splunk, ELK Stack)",
+    "confidence": 0.2,
+    "compliance": [
+      "hipaa"
+    ]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TC-1\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify user can securely access the MediTrack system via login\",\n    \"preconditions\": [\n      \"A test user account with valid credentials (username, password) is created for MediTrack.\",\n      \"The MediTrack application is deployed and accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack application's login URL.\",\n      \"2. Enter a valid username in the username field.\",\n      \"3. Enter the corresponding valid password in the password field.\",\n      \"4. Click the 'Login' button or equivalent action.\"\n    ],\n    \"expected\": \"The user is successfully authenticated and redirected to the MediTrack system's main dashboard or an authorized landing page, indicating successful secure access.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 0.1,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-2\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify basic information display and navigation within MediTrack\",\n    \"preconditions\": [\n      \"User is successfully logged into the MediTrack system with appropriate permissions to view data.\",\n      \"Sample data (e.g., patient records) exists within the system.\"\n    ],\n    \"steps\": [\n      \"1. From the main dashboard, attempt to navigate to a primary data viewing section (e.g., 'Patient List', 'Reports', 'Dashboard').\",\n      \"2. Observe the displayed content within that section.\",\n      \"3. Attempt to return to the main dashboard or navigate to another primary section.\"\n    ],\n    \"expected\": \"The system displays relevant information clearly and without errors. Navigation between primary sections is functional and responsive, reflecting a basic operational state for a 'MediTrack' system.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 0.1,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-3\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify no Protected Health Information (PHI) is inadvertently exposed in public-facing interfaces or unauthenticated access\",\n    \"preconditions\": [\n      \"The MediTrack application is accessible.\",\n      \"Network monitoring tools (e.g., browser developer tools, proxy) are available.\"\n    ],\n    \"steps\": [\n      \"1. Access the MediTrack application URL without logging in.\",\n      \"2. Examine the page source, network requests, and responses for any unprotected PHI or sensitive patient data.\",\n      \"3. Attempt to access common public or unauthenticated endpoints (e.g., 'about', 'contact', error pages) and inspect their content and network traffic.\",\n      \"4. Attempt to access known application endpoints that typically require authentication, observing the error or redirection behavior.\"\n    ],\n    \"expected\": \"No Protected Health Information (PHI) or sensitive patient data is discoverable or exposed to unauthenticated users or in public-facing parts of the application, consistent with HIPAA privacy principles.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual, Burp Suite, OWASP ZAP\",\n    \"confidence\": 0.2,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-4\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify system audit logs record critical user actions and data access attempts\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system with a test account.\",\n      \"Administrative access to the system's audit logs is available.\"\n    ],\n    \"steps\": [\n      \"1. As a test user, perform a series of actions within MediTrack, such as viewing a patient record, attempting to modify data (even if permission is denied), and logging out.\",\n      \"2. Log in as an administrator (or equivalent) and access the system's audit logs.\",\n      \"3. Review the audit logs for records corresponding to the actions performed by the test user.\"\n    ],\n    \"expected\": \"All critical user actions, particularly those involving access, modification attempts, or significant events related to patient data, are accurately recorded in the audit logs, including timestamps, user identifiers, and action details, in compliance with HIPAA's audit control requirements.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual, Log Analysis Tools (e.g., Splunk, ELK Stack)\",\n    \"confidence\": 0.2,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 676,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 4481,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 178,
+    "outputTokens": 1175,
+    "thoughtsTokens": 2942,
+    "totalTokens": 4295
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TC-1\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify user can securely access the MediTrack system via login\",\n    \"preconditions\": [\n      \"A test user account with valid credentials (username, password) is created for MediTrack.\",\n      \"The MediTrack application is deployed and accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack application's login URL.\",\n      \"2. Enter a valid username in the username field.\",\n      \"3. Enter the corresponding valid password in the password field.\",\n      \"4. Click the 'Login' button or equivalent action.\"\n    ],\n    \"expected\": \"The user is successfully authenticated and redirected to the MediTrack system's main dashboard or an authorized landing page, indicating successful secure access.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 0.1,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-2\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify basic information display and navigation within MediTrack\",\n    \"preconditions\": [\n      \"User is successfully logged into the MediTrack system with appropriate permissions to view data.\",\n      \"Sample data (e.g., patient records) exists within the system.\"\n    ],\n    \"steps\": [\n      \"1. From the main dashboard, attempt to navigate to a primary data viewing section (e.g., 'Patient List', 'Reports', 'Dashboard').\",\n      \"2. Observe the displayed content within that section.\",\n      \"3. Attempt to return to the main dashboard or navigate to another primary section.\"\n    ],\n    \"expected\": \"The system displays relevant information clearly and without errors. Navigation between primary sections is functional and responsive, reflecting a basic operational state for a 'MediTrack' system.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 0.1,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-3\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify no Protected Health Information (PHI) is inadvertently exposed in public-facing interfaces or unauthenticated access\",\n    \"preconditions\": [\n      \"The MediTrack application is accessible.\",\n      \"Network monitoring tools (e.g., browser developer tools, proxy) are available.\"\n    ],\n    \"steps\": [\n      \"1. Access the MediTrack application URL without logging in.\",\n      \"2. Examine the page source, network requests, and responses for any unprotected PHI or sensitive patient data.\",\n      \"3. Attempt to access common public or unauthenticated endpoints (e.g., 'about', 'contact', error pages) and inspect their content and network traffic.\",\n      \"4. Attempt to access known application endpoints that typically require authentication, observing the error or redirection behavior.\"\n    ],\n    \"expected\": \"No Protected Health Information (PHI) or sensitive patient data is discoverable or exposed to unauthenticated users or in public-facing parts of the application, consistent with HIPAA privacy principles.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual, Burp Suite, OWASP ZAP\",\n    \"confidence\": 0.2,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-4\",\n    \"req_id\": \"REQ-1758475546374\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify system audit logs record critical user actions and data access attempts\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system with a test account.\",\n      \"Administrative access to the system's audit logs is available.\"\n    ],\n    \"steps\": [\n      \"1. As a test user, perform a series of actions within MediTrack, such as viewing a patient record, attempting to modify data (even if permission is denied), and logging out.\",\n      \"2. Log in as an administrator (or equivalent) and access the system's audit logs.\",\n      \"3. Review the audit logs for records corresponding to the actions performed by the test user.\"\n    ],\n    \"expected\": \"All critical user actions, particularly those involving access, modification attempts, or significant events related to patient data, are accurately recorded in the audit logs, including timestamps, user identifiers, and action details, in compliance with HIPAA's audit control requirements.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual, Log Analysis Tools (e.g., Splunk, ELK Stack)\",\n    \"confidence\": 0.2,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 178,
+      "candidatesTokenCount": 1175,
+      "totalTokenCount": 4295,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 178
+        }
+      ],
+      "thoughtsTokenCount": 2942
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "QDXQaPLhG5rVz7IPtL336Ag"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide 2-8 testcases. Use req_id provided."
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1758475546374\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}
