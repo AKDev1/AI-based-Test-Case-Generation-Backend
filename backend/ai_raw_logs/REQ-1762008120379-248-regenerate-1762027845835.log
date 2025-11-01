@@ -1,0 +1,216 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TC-AUTH-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify successful user login with valid credentials",
+    "preconditions": [
+      "A doctor or nurse account with valid email and password exists in the system.",
+      "The user is on the MediTrack login page."
+    ],
+    "steps": [
+      "Enter a valid registered email into the 'Email' field.",
+      "Enter the correct password into the 'Password' field.",
+      "Click the 'Log In' button."
+    ],
+    "expected": "The user is successfully logged in and redirected to the application's dashboard or home screen, which displays their authorized functionalities.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-AUTH-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify password encryption and masking during login",
+    "preconditions": [
+      "A doctor or nurse account is registered in the system.",
+      "The user is on the MediTrack login page."
+    ],
+    "steps": [
+      "Enter a password into the 'Password' field on the login page and observe the input.",
+      "Submit the login form with valid credentials (if possible) or attempt to retrieve the stored password directly from the database (with appropriate access)."
+    ],
+    "expected": "The password entered in the UI field should be masked (e.g., displayed as asterisks or dots). The password stored in the backend database must be encrypted or hashed and not visible in plain text.",
+    "automatable": false,
+    "suggested_tool": "Manual observation for UI, SQL client/DB tool for backend verification",
+    "confidence": 0.8,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-AUTH-003",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify account lockout after more than 5 failed login attempts",
+    "preconditions": [
+      "A doctor or nurse account with a known valid email exists in the system.",
+      "The user is on the MediTrack login page."
+    ],
+    "steps": [
+      "Enter the valid email and an incorrect password into the respective fields.",
+      "Click the 'Log In' button.",
+      "Repeat steps 1-2 five more times (total of 6 failed attempts).",
+      "Attempt to log in again with correct credentials or any credentials."
+    ],
+    "expected": "After the 6th failed login attempt, the system displays a message indicating the account is locked for 15 minutes. During the lockout period, further login attempts for that account should be denied.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-VITALS-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify entry and validation of patient vital signs within specified ranges",
+    "preconditions": [
+      "An authorized user (doctor or nurse) is logged into MediTrack.",
+      "At least one patient record exists in the system."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' screen.",
+      "Select an existing patient by their ID.",
+      "Enter Heart Rate: 80 bpm (valid range 30-200).",
+      "Enter Blood Pressure: 120/80 mmHg (valid values expected by system).",
+      "Enter Temperature: 98.6 °F (valid range 95-107).",
+      "Click 'Save'.",
+      "Attempt to enter Heart Rate: 20 bpm (invalid range) and click 'Save'.",
+      "Attempt to enter Temperature: 90 °F (invalid range) and click 'Save'.",
+      "Verify the saved valid vitals are displayed correctly with a timestamp and patient ID in the patient's record."
+    ],
+    "expected": "The system successfully saves the valid vital signs and displays a confirmation. It should display an error message for Heart Rate 20 bpm (out of 30-200 bpm range) and Temperature 90 °F (out of 95-107 °F range). The valid entry should be retrievable and associated with the correct patient ID and a timestamp.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright, API testing tool (for data retrieval)",
+    "confidence": 0.9,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-ALERTS-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify abnormal vitals trigger a red warning icon and a single email alert",
+    "preconditions": [
+      "An authorized user (doctor or nurse) is logged into MediTrack.",
+      "At least one patient record exists with an assigned doctor.",
+      "The system is configured to send email alerts to the assigned doctor."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' screen.",
+      "Select a patient with an assigned doctor.",
+      "Enter abnormal Heart Rate: 25 bpm.",
+      "Enter abnormal Blood Pressure: 200/120 mmHg.",
+      "Enter abnormal Temperature: 105 °F.",
+      "Click 'Save'.",
+      "Observe the patient's record/dashboard for visual indicators.",
+      "Check the assigned doctor's email inbox for an alert notification.",
+      "Re-enter the exact same abnormal vital signs for the same patient within a short period (e.g., 5 minutes) and click 'Save'."
+    ],
+    "expected": "A red warning icon is displayed next to the abnormal vitals on the patient's record/dashboard. A single email alert is sent to the assigned doctor for the abnormal entry. No duplicate email alerts are sent for subsequent identical abnormal entries for the same patient.",
+    "automatable": false,
+    "suggested_tool": "Selenium/Playwright (for UI), Email testing tool/mock server (for email verification)",
+    "confidence": 0.8,
+    "compliance": ["hipaa"]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials\",\n    \"preconditions\": [\n      \"A doctor or nurse account with valid email and password exists in the system.\",\n      \"The user is on the MediTrack login page.\"\n    ],\n    \"steps\": [\n      \"Enter a valid registered email into the 'Email' field.\",\n      \"Enter the correct password into the 'Password' field.\",\n      \"Click the 'Log In' button.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to the application's dashboard or home screen, which displays their authorized functionalities.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium/Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify password encryption and masking during login\",\n    \"preconditions\": [\n      \"A doctor or nurse account is registered in the system.\",\n      \"The user is on the MediTrack login page.\"\n    ],\n    \"steps\": [\n      \"Enter a password into the 'Password' field on the login page and observe the input.\",\n      \"Submit the login form with valid credentials (if possible) or attempt to retrieve the stored password directly from the database (with appropriate access).\"\n    ],\n    \"expected\": \"The password entered in the UI field should be masked (e.g., displayed as asterisks or dots). The password stored in the backend database must be encrypted or hashed and not visible in plain text.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual observation for UI, SQL client/DB tool for backend verification\",\n    \"confidence\": 0.8,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-003\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify account lockout after more than 5 failed login attempts\",\n    \"preconditions\": [\n      \"A doctor or nurse account with a known valid email exists in the system.\",\n      \"The user is on the MediTrack login page.\"\n    ],\n    \"steps\": [\n      \"Enter the valid email and an incorrect password into the respective fields.\",\n      \"Click the 'Log In' button.\",\n      \"Repeat steps 1-2 five more times (total of 6 failed attempts).\",\n      \"Attempt to log in again with correct credentials or any credentials.\"\n    ],\n    \"expected\": \"After the 6th failed login attempt, the system displays a message indicating the account is locked for 15 minutes. During the lockout period, further login attempts for that account should be denied.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium/Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify entry and validation of patient vital signs within specified ranges\",\n    \"preconditions\": [\n      \"An authorized user (doctor or nurse) is logged into MediTrack.\",\n      \"At least one patient record exists in the system.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' screen.\",\n      \"Select an existing patient by their ID.\",\n      \"Enter Heart Rate: 80 bpm (valid range 30-200).\",\n      \"Enter Blood Pressure: 120/80 mmHg (valid values expected by system).\",\n      \"Enter Temperature: 98.6 °F (valid range 95-107).\",\n      \"Click 'Save'.\",\n      \"Attempt to enter Heart Rate: 20 bpm (invalid range) and click 'Save'.\",\n      \"Attempt to enter Temperature: 90 °F (invalid range) and click 'Save'.\",\n      \"Verify the saved valid vitals are displayed correctly with a timestamp and patient ID in the patient's record.\"\n    ],\n    \"expected\": \"The system successfully saves the valid vital signs and displays a confirmation. It should display an error message for Heart Rate 20 bpm (out of 30-200 bpm range) and Temperature 90 °F (out of 95-107 °F range). The valid entry should be retrievable and associated with the correct patient ID and a timestamp.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium/Playwright, API testing tool (for data retrieval)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-ALERTS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify abnormal vitals trigger a red warning icon and a single email alert\",\n    \"preconditions\": [\n      \"An authorized user (doctor or nurse) is logged into MediTrack.\",\n      \"At least one patient record exists with an assigned doctor.\",\n      \"The system is configured to send email alerts to the assigned doctor.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' screen.\",\n      \"Select a patient with an assigned doctor.\",\n      \"Enter abnormal Heart Rate: 25 bpm.\",\n      \"Enter abnormal Blood Pressure: 200/120 mmHg.\",\n      \"Enter abnormal Temperature: 105 °F.\",\n      \"Click 'Save'.\",\n      \"Observe the patient's record/dashboard for visual indicators.\",\n      \"Check the assigned doctor's email inbox for an alert notification.\",\n      \"Re-enter the exact same abnormal vital signs for the same patient within a short period (e.g., 5 minutes) and click 'Save'.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal vitals on the patient's record/dashboard. A single email alert is sent to the assigned doctor for the abnormal entry. No duplicate email alerts are sent for subsequent identical abnormal entries for the same patient.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Selenium/Playwright (for UI), Email testing tool/mock server (for email verification)\",\n    \"confidence\": 0.8,\n    \"compliance\": [\"hipaa\"]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 894,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 5686,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 16499,
+    "outputTokens": 1615,
+    "thoughtsTokens": 2320,
+    "totalTokens": 20434
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials\",\n    \"preconditions\": [\n      \"A doctor or nurse account with valid email and password exists in the system.\",\n      \"The user is on the MediTrack login page.\"\n    ],\n    \"steps\": [\n      \"Enter a valid registered email into the 'Email' field.\",\n      \"Enter the correct password into the 'Password' field.\",\n      \"Click the 'Log In' button.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to the application's dashboard or home screen, which displays their authorized functionalities.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium/Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify password encryption and masking during login\",\n    \"preconditions\": [\n      \"A doctor or nurse account is registered in the system.\",\n      \"The user is on the MediTrack login page.\"\n    ],\n    \"steps\": [\n      \"Enter a password into the 'Password' field on the login page and observe the input.\",\n      \"Submit the login form with valid credentials (if possible) or attempt to retrieve the stored password directly from the database (with appropriate access).\"\n    ],\n    \"expected\": \"The password entered in the UI field should be masked (e.g., displayed as asterisks or dots). The password stored in the backend database must be encrypted or hashed and not visible in plain text.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual observation for UI, SQL client/DB tool for backend verification\",\n    \"confidence\": 0.8,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-003\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify account lockout after more than 5 failed login attempts\",\n    \"preconditions\": [\n      \"A doctor or nurse account with a known valid email exists in the system.\",\n      \"The user is on the MediTrack login page.\"\n    ],\n    \"steps\": [\n      \"Enter the valid email and an incorrect password into the respective fields.\",\n      \"Click the 'Log In' button.\",\n      \"Repeat steps 1-2 five more times (total of 6 failed attempts).\",\n      \"Attempt to log in again with correct credentials or any credentials.\"\n    ],\n    \"expected\": \"After the 6th failed login attempt, the system displays a message indicating the account is locked for 15 minutes. During the lockout period, further login attempts for that account should be denied.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium/Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify entry and validation of patient vital signs within specified ranges\",\n    \"preconditions\": [\n      \"An authorized user (doctor or nurse) is logged into MediTrack.\",\n      \"At least one patient record exists in the system.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' screen.\",\n      \"Select an existing patient by their ID.\",\n      \"Enter Heart Rate: 80 bpm (valid range 30-200).\",\n      \"Enter Blood Pressure: 120/80 mmHg (valid values expected by system).\",\n      \"Enter Temperature: 98.6 °F (valid range 95-107).\",\n      \"Click 'Save'.\",\n      \"Attempt to enter Heart Rate: 20 bpm (invalid range) and click 'Save'.\",\n      \"Attempt to enter Temperature: 90 °F (invalid range) and click 'Save'.\",\n      \"Verify the saved valid vitals are displayed correctly with a timestamp and patient ID in the patient's record.\"\n    ],\n    \"expected\": \"The system successfully saves the valid vital signs and displays a confirmation. It should display an error message for Heart Rate 20 bpm (out of 30-200 bpm range) and Temperature 90 °F (out of 95-107 °F range). The valid entry should be retrievable and associated with the correct patient ID and a timestamp.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium/Playwright, API testing tool (for data retrieval)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-ALERTS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify abnormal vitals trigger a red warning icon and a single email alert\",\n    \"preconditions\": [\n      \"An authorized user (doctor or nurse) is logged into MediTrack.\",\n      \"At least one patient record exists with an assigned doctor.\",\n      \"The system is configured to send email alerts to the assigned doctor.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' screen.\",\n      \"Select a patient with an assigned doctor.\",\n      \"Enter abnormal Heart Rate: 25 bpm.\",\n      \"Enter abnormal Blood Pressure: 200/120 mmHg.\",\n      \"Enter abnormal Temperature: 105 °F.\",\n      \"Click 'Save'.\",\n      \"Observe the patient's record/dashboard for visual indicators.\",\n      \"Check the assigned doctor's email inbox for an alert notification.\",\n      \"Re-enter the exact same abnormal vital signs for the same patient within a short period (e.g., 5 minutes) and click 'Save'.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal vitals on the patient's record/dashboard. A single email alert is sent to the assigned doctor for the abnormal entry. No duplicate email alerts are sent for subsequent identical abnormal entries for the same patient.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Selenium/Playwright (for UI), Email testing tool/mock server (for email verification)\",\n    \"confidence\": 0.8,\n    \"compliance\": [\"hipaa\"]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 16499,
+      "candidatesTokenCount": 1615,
+      "totalTokenCount": 20434,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 245
+        },
+        {
+          "modality": "DOCUMENT",
+          "tokenCount": 16254
+        }
+      ],
+      "thoughtsTokenCount": 2320
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "RWkGaeriJJ2Bg8UPi6SokA4"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide minimum 2 testcases. Decide the max number of testcases based on the size of the requirements. You are free to produce as many testcases as required. Use req_id: REQ-1762008120379-248.\n\nAdditional user instructions:\nGive me 5 testcases instead of 4."
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1762008120379-248\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/kk8kj49bdjuc"
+            }
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/1ctqa4ucb92e"
+            }
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

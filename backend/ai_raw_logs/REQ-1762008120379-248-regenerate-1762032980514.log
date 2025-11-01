@@ -1,0 +1,261 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TC-AUTH-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Successful User Login with Valid Credentials and Password Encryption",
+    "preconditions": [
+      "A doctor or nurse user account exists with a registered email and password.",
+      "The MediTrack application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the 'Email' field.",
+      "Enter the corresponding valid password in the 'Password' field.",
+      "Observe that the password entered is masked and not visible in plain text.",
+      "Click the 'Login' button.",
+      "Verify that the password is encrypted when transmitted and stored, as per technical specifications."
+    ],
+    "expected": "The user is successfully logged in and redirected to the application's main dashboard. The password should not be visible in plain text during input, and upon backend inspection, it must be stored and transmitted in an encrypted format.",
+    "automatable": true,
+    "suggested_tool": "Selenium for UI interaction, Burp Suite/Postman for API/network traffic inspection, database direct query for storage verification.",
+    "confidence": 0.9,
+    "compliance": [
+      "FR-1.1: Users shall be able to log in using email and password.",
+      "FR-1.2: Passwords shall be encrypted and not visible in plain text.",
+      "Acceptance Criteria: Login works with valid credentials.",
+      "HIPAA: Administrative Simplification (P8, II.C Security), Security Requirements (P60, B. Technical security services - passwords, encryption, entity authentication; B. Technical security mechanisms - encryption)",
+      "HIPAA: Privacy of Health Information (P12, V. Protected health information definition - PHI maintained/transmitted by electronic media requires protection)."
+    ]
+  },
+  {
+    "tc_id": "TC-AUTH-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Account Lockout After More Than 5 Failed Login Attempts",
+    "preconditions": [
+      "A doctor or nurse user account exists with a registered email and password.",
+      "The MediTrack application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the 'Email' field.",
+      "Enter an invalid password in the 'Password' field.",
+      "Click the 'Login' button. Repeat this step 5 times.",
+      "On the 6th attempt, enter any invalid password and click 'Login'.",
+      "Attempt to log in with the correct credentials immediately after the 6th failed attempt.",
+      "Wait for 15 minutes.",
+      "Attempt to log in again with the correct credentials."
+    ],
+    "expected": "After the 6th failed login attempt, the system should display a message indicating the account is locked. Subsequent login attempts (even with correct credentials) should fail until 15 minutes have passed. After 15 minutes, the user should be able to successfully log in with correct credentials.",
+    "automatable": true,
+    "suggested_tool": "Selenium for UI interaction, system logs for monitoring lockout duration.",
+    "confidence": 0.9,
+    "compliance": [
+      "FR-1.3: Failed login attempts > 5 shall lock the account for 15 minutes.",
+      "Acceptance Criteria: Login locks after 5 attempts.",
+      "HIPAA: Security Requirements (P59, VI.A. Administrative procedures - documented, formal practices to manage security measures and personnel conduct; implicitly covers account management policies to protect data from unauthorized access attempts)."
+    ]
+  },
+  {
+    "tc_id": "TC-VITALS-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Patient Vital Signs Entry and Validation with Timestamp and Patient ID",
+    "preconditions": [
+      "An authorized doctor or nurse user is logged into MediTrack.",
+      "A patient record exists for vital sign entry."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section for a specific patient.",
+      "Attempt to enter a Heart Rate value outside the valid range (e.g., 20 bpm).",
+      "Attempt to enter a Temperature value outside the valid range (e.g., 90 °F).",
+      "Enter valid values for Heart Rate (e.g., 75 bpm), Blood Pressure (e.g., 120/80 mmHg), and Temperature (e.g., 98.6 °F).",
+      "Click the 'Save' button.",
+      "Retrieve the saved vital entry and verify its details, including the patient ID and system-generated timestamp."
+    ],
+    "expected": "The system should display an error message for vital signs entered outside the specified valid ranges (HR 30–200 bpm, Temp 95–107 °F). Valid vital sign entries should be successfully saved, associated with the correct patient ID, and include an accurate timestamp of the entry.",
+    "automatable": true,
+    "suggested_tool": "Selenium for UI interaction and data entry, API tool/database query for verifying saved data, patient ID, and timestamp.",
+    "confidence": 0.9,
+    "compliance": [
+      "FR-2.1: The system shall allow entry of vitals: Heart Rate, Blood Pressure, Temperature.",
+      "FR-2.2: The system shall validate values (e.g., HR 30–200 bpm, Temp 95–107 °F).",
+      "FR-2.3: The system shall save each entry with timestamp and patient ID.",
+      "Acceptance Criteria: Patient vitals accept only valid ranges; invalid inputs trigger error messages.",
+      "HIPAA: Privacy of Health Information (P12, V. Protected health information definition - vital signs are PHI).",
+      "HIPAA: Security Requirements (P59, VI.A. Administrative procedures, P60, B. Physical safeguards, P60, B. Technical security services - controlling individual access to information), (P13, V.A.2. Minimum Necessary Rule - ensuring only necessary data is collected and processed)."
+    ]
+  },
+  {
+    "tc_id": "TC-ALERT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Abnormal Vitals Alert - Red Warning Icon and Email Notification without Duplication",
+    "preconditions": [
+      "An authorized doctor or nurse user is logged into MediTrack.",
+      "A patient record exists with an assigned doctor.",
+      "The system's email notification service is configured and operational."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section for a specific patient.",
+      "Enter a Heart Rate value that is outside the normal range (e.g., 25 bpm), making it abnormal.",
+      "Enter Blood Pressure and Temperature within normal ranges.",
+      "Click the 'Save' button.",
+      "Observe the patient's vital signs display in the system.",
+      "Check the assigned doctor's email inbox for an alert.",
+      "Save the same abnormal vital sign again immediately.",
+      "Check the assigned doctor's email inbox again for a new alert."
+    ],
+    "expected": "Upon saving abnormal vital signs, a red warning icon should appear next to the abnormal vital in the system's display. An email alert containing the abnormal entry details should be sent to the assigned doctor. No duplicate email alerts should be sent for the same abnormal entry within a short period, demonstrating single alert trigger per abnormal entry.",
+    "automatable": true,
+    "suggested_tool": "Selenium for UI interaction, email testing tool/API for verifying email receipt and content, backend monitoring for alert triggering logic.",
+    "confidence": 0.85,
+    "compliance": [
+      "FR-3.1: The system shall display a red warning icon next to abnormal vitals.",
+      "FR-3.2: The system shall send an email alert to the assigned doctor for abnormal entries.",
+      "FR-3.3: Alerts shall trigger only once per abnormal entry (no duplicates).",
+      "Acceptance Criteria: Abnormal vitals trigger alerts and email notifications without duplication.",
+      "HIPAA: Privacy of Health Information (P12, V. Protected health information definition - vital signs are PHI).",
+      "HIPAA: Uses and Disclosures to Carry Out Treatment, Payment, or Health Care Operations (P18, V.C. - PHI may be used/disclosed for treatment/healthcare operations without explicit authorization in certain cases, which sending alerts to assigned doctors for abnormal vitals would fall under).",
+      "HIPAA: Minimum Necessary Rule (P13, V.A.2.; P36, G.2. - PHI disclosed in email alerts should be limited to the minimum necessary to achieve the purpose of the alert).",
+      "HIPAA: Security Requirements (P60, B. Technical security mechanisms - data transmitted over a network, such as email, should be encrypted)."
+    ]
+  },
+  {
+    "tc_id": "TC-REPORT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Patient Health Report Generation in PDF Format with Date Range Filtering",
+    "preconditions": [
+      "An authorized doctor or nurse user is logged into MediTrack.",
+      "A patient record exists with multiple vital sign entries spanning several dates.",
+      "The system's report generation module is operational."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Health Report Generation' section.",
+      "Select a patient for whom to generate a report.",
+      "Specify a date range that includes some, but not all, of the patient's vital sign entries (e.g., last 30 days).",
+      "Initiate the report generation process.",
+      "Download the generated report.",
+      "Open the downloaded report and verify its format.",
+      "Verify that the report includes the patient's details.",
+      "Verify that the report includes all vital signs recorded only within the specified date range and no entries outside it."
+    ],
+    "expected": "The system should successfully generate and download a report in PDF format. The report should accurately display the selected patient's details and all vital signs recorded *only* within the specified date range. Vital entries outside the chosen date range should not be present in the report.",
+    "automatable": true,
+    "suggested_tool": "Selenium for UI interaction, PDF parsing library for content verification, API tool for data validation against the database.",
+    "confidence": 0.9,
+    "compliance": [
+      "FR-4.1: Reports shall include patient details and all vitals recorded in a given date range.",
+      "FR-4.2: Reports shall be generated in PDF format.",
+      "FR-4.3: Users shall be able to filter reports by date range.",
+      "Acceptance Criteria: Reports generate correctly in PDF, with accurate patient details and date filtering.",
+      "HIPAA: Privacy of Health Information (P12, V. Protected health information definition - patient details and vitals are PHI).",
+      "HIPAA: Access of Individuals to PHI (P47, J.1.a - individuals have a right of access to inspect and obtain a copy of PHI). This implies the system must be able to generate reports containing PHI for the individual or authorized personnel.",
+      "HIPAA: Provision of Access (P47, J.3.b.i Form of Access Requested - The Covered Entity must provide the access in the form or format requested by the individual, if readily producible; PDF is a specific, producible format).",
+      "HIPAA: Security Requirements (P59, VI. Security Requirements - general security applies to electronic PHI; P60, B. Technical security services - encryption of data at rest, P60, B. Technical security mechanisms - encryption for data in transit)."
+    ]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Successful User Login with Valid Credentials and Password Encryption\",\n    \"preconditions\": [\n      \"A doctor or nurse user account exists with a registered email and password.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter the corresponding valid password in the 'Password' field.\",\n      \"Observe that the password entered is masked and not visible in plain text.\",\n      \"Click the 'Login' button.\",\n      \"Verify that the password is encrypted when transmitted and stored, as per technical specifications.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to the application's main dashboard. The password should not be visible in plain text during input, and upon backend inspection, it must be stored and transmitted in an encrypted format.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, Burp Suite/Postman for API/network traffic inspection, database direct query for storage verification.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-1.1: Users shall be able to log in using email and password.\",\n      \"FR-1.2: Passwords shall be encrypted and not visible in plain text.\",\n      \"Acceptance Criteria: Login works with valid credentials.\",\n      \"HIPAA: Administrative Simplification (P8, II.C Security), Security Requirements (P60, B. Technical security services - passwords, encryption, entity authentication; B. Technical security mechanisms - encryption)\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - PHI maintained/transmitted by electronic media requires protection).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Account Lockout After More Than 5 Failed Login Attempts\",\n    \"preconditions\": [\n      \"A doctor or nurse user account exists with a registered email and password.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter an invalid password in the 'Password' field.\",\n      \"Click the 'Login' button. Repeat this step 5 times.\",\n      \"On the 6th attempt, enter any invalid password and click 'Login'.\",\n      \"Attempt to log in with the correct credentials immediately after the 6th failed attempt.\",\n      \"Wait for 15 minutes.\",\n      \"Attempt to log in again with the correct credentials.\"\n    ],\n    \"expected\": \"After the 6th failed login attempt, the system should display a message indicating the account is locked. Subsequent login attempts (even with correct credentials) should fail until 15 minutes have passed. After 15 minutes, the user should be able to successfully log in with correct credentials.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, system logs for monitoring lockout duration.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-1.3: Failed login attempts > 5 shall lock the account for 15 minutes.\",\n      \"Acceptance Criteria: Login locks after 5 attempts.\",\n      \"HIPAA: Security Requirements (P59, VI.A. Administrative procedures - documented, formal practices to manage security measures and personnel conduct; implicitly covers account management policies to protect data from unauthorized access attempts).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Patient Vital Signs Entry and Validation with Timestamp and Patient ID\",\n    \"preconditions\": [\n      \"An authorized doctor or nurse user is logged into MediTrack.\",\n      \"A patient record exists for vital sign entry.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section for a specific patient.\",\n      \"Attempt to enter a Heart Rate value outside the valid range (e.g., 20 bpm).\",\n      \"Attempt to enter a Temperature value outside the valid range (e.g., 90 °F).\",\n      \"Enter valid values for Heart Rate (e.g., 75 bpm), Blood Pressure (e.g., 120/80 mmHg), and Temperature (e.g., 98.6 °F).\",\n      \"Click the 'Save' button.\",\n      \"Retrieve the saved vital entry and verify its details, including the patient ID and system-generated timestamp.\"\n    ],\n    \"expected\": \"The system should display an error message for vital signs entered outside the specified valid ranges (HR 30–200 bpm, Temp 95–107 °F). Valid vital sign entries should be successfully saved, associated with the correct patient ID, and include an accurate timestamp of the entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction and data entry, API tool/database query for verifying saved data, patient ID, and timestamp.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-2.1: The system shall allow entry of vitals: Heart Rate, Blood Pressure, Temperature.\",\n      \"FR-2.2: The system shall validate values (e.g., HR 30–200 bpm, Temp 95–107 °F).\",\n      \"FR-2.3: The system shall save each entry with timestamp and patient ID.\",\n      \"Acceptance Criteria: Patient vitals accept only valid ranges; invalid inputs trigger error messages.\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - vital signs are PHI).\",\n      \"HIPAA: Security Requirements (P59, VI.A. Administrative procedures, P60, B. Physical safeguards, P60, B. Technical security services - controlling individual access to information), (P13, V.A.2. Minimum Necessary Rule - ensuring only necessary data is collected and processed).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-ALERT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Abnormal Vitals Alert - Red Warning Icon and Email Notification without Duplication\",\n    \"preconditions\": [\n      \"An authorized doctor or nurse user is logged into MediTrack.\",\n      \"A patient record exists with an assigned doctor.\",\n      \"The system's email notification service is configured and operational.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section for a specific patient.\",\n      \"Enter a Heart Rate value that is outside the normal range (e.g., 25 bpm), making it abnormal.\",\n      \"Enter Blood Pressure and Temperature within normal ranges.\",\n      \"Click the 'Save' button.\",\n      \"Observe the patient's vital signs display in the system.\",\n      \"Check the assigned doctor's email inbox for an alert.\",\n      \"Save the same abnormal vital sign again immediately.\",\n      \"Check the assigned doctor's email inbox again for a new alert.\"\n    ],\n    \"expected\": \"Upon saving abnormal vital signs, a red warning icon should appear next to the abnormal vital in the system's display. An email alert containing the abnormal entry details should be sent to the assigned doctor. No duplicate email alerts should be sent for the same abnormal entry within a short period, demonstrating single alert trigger per abnormal entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, email testing tool/API for verifying email receipt and content, backend monitoring for alert triggering logic.\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"FR-3.1: The system shall display a red warning icon next to abnormal vitals.\",\n      \"FR-3.2: The system shall send an email alert to the assigned doctor for abnormal entries.\",\n      \"FR-3.3: Alerts shall trigger only once per abnormal entry (no duplicates).\",\n      \"Acceptance Criteria: Abnormal vitals trigger alerts and email notifications without duplication.\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - vital signs are PHI).\",\n      \"HIPAA: Uses and Disclosures to Carry Out Treatment, Payment, or Health Care Operations (P18, V.C. - PHI may be used/disclosed for treatment/healthcare operations without explicit authorization in certain cases, which sending alerts to assigned doctors for abnormal vitals would fall under).\",\n      \"HIPAA: Minimum Necessary Rule (P13, V.A.2.; P36, G.2. - PHI disclosed in email alerts should be limited to the minimum necessary to achieve the purpose of the alert).\",\n      \"HIPAA: Security Requirements (P60, B. Technical security mechanisms - data transmitted over a network, such as email, should be encrypted).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REPORT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Patient Health Report Generation in PDF Format with Date Range Filtering\",\n    \"preconditions\": [\n      \"An authorized doctor or nurse user is logged into MediTrack.\",\n      \"A patient record exists with multiple vital sign entries spanning several dates.\",\n      \"The system's report generation module is operational.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Health Report Generation' section.\",\n      \"Select a patient for whom to generate a report.\",\n      \"Specify a date range that includes some, but not all, of the patient's vital sign entries (e.g., last 30 days).\",\n      \"Initiate the report generation process.\",\n      \"Download the generated report.\",\n      \"Open the downloaded report and verify its format.\",\n      \"Verify that the report includes the patient's details.\",\n      \"Verify that the report includes all vital signs recorded only within the specified date range and no entries outside it.\"\n    ],\n    \"expected\": \"The system should successfully generate and download a report in PDF format. The report should accurately display the selected patient's details and all vital signs recorded *only* within the specified date range. Vital entries outside the chosen date range should not be present in the report.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, PDF parsing library for content verification, API tool for data validation against the database.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-4.1: Reports shall include patient details and all vitals recorded in a given date range.\",\n      \"FR-4.2: Reports shall be generated in PDF format.\",\n      \"FR-4.3: Users shall be able to filter reports by date range.\",\n      \"Acceptance Criteria: Reports generate correctly in PDF, with accurate patient details and date filtering.\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - patient details and vitals are PHI).\",\n      \"HIPAA: Access of Individuals to PHI (P47, J.1.a - individuals have a right of access to inspect and obtain a copy of PHI). This implies the system must be able to generate reports containing PHI for the individual or authorized personnel.\",\n      \"HIPAA: Provision of Access (P47, J.3.b.i Form of Access Requested - The Covered Entity must provide the access in the form or format requested by the individual, if readily producible; PDF is a specific, producible format).\",\n      \"HIPAA: Security Requirements (P59, VI. Security Requirements - general security applies to electronic PHI; P60, B. Technical security services - encryption of data at rest, P60, B. Technical security mechanisms - encryption for data in transit).\"\n    ]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 894,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 11360,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 16497,
+    "outputTokens": 2850,
+    "thoughtsTokens": 2893,
+    "totalTokens": 22240
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Successful User Login with Valid Credentials and Password Encryption\",\n    \"preconditions\": [\n      \"A doctor or nurse user account exists with a registered email and password.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter the corresponding valid password in the 'Password' field.\",\n      \"Observe that the password entered is masked and not visible in plain text.\",\n      \"Click the 'Login' button.\",\n      \"Verify that the password is encrypted when transmitted and stored, as per technical specifications.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to the application's main dashboard. The password should not be visible in plain text during input, and upon backend inspection, it must be stored and transmitted in an encrypted format.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, Burp Suite/Postman for API/network traffic inspection, database direct query for storage verification.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-1.1: Users shall be able to log in using email and password.\",\n      \"FR-1.2: Passwords shall be encrypted and not visible in plain text.\",\n      \"Acceptance Criteria: Login works with valid credentials.\",\n      \"HIPAA: Administrative Simplification (P8, II.C Security), Security Requirements (P60, B. Technical security services - passwords, encryption, entity authentication; B. Technical security mechanisms - encryption)\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - PHI maintained/transmitted by electronic media requires protection).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Account Lockout After More Than 5 Failed Login Attempts\",\n    \"preconditions\": [\n      \"A doctor or nurse user account exists with a registered email and password.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter an invalid password in the 'Password' field.\",\n      \"Click the 'Login' button. Repeat this step 5 times.\",\n      \"On the 6th attempt, enter any invalid password and click 'Login'.\",\n      \"Attempt to log in with the correct credentials immediately after the 6th failed attempt.\",\n      \"Wait for 15 minutes.\",\n      \"Attempt to log in again with the correct credentials.\"\n    ],\n    \"expected\": \"After the 6th failed login attempt, the system should display a message indicating the account is locked. Subsequent login attempts (even with correct credentials) should fail until 15 minutes have passed. After 15 minutes, the user should be able to successfully log in with correct credentials.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, system logs for monitoring lockout duration.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-1.3: Failed login attempts > 5 shall lock the account for 15 minutes.\",\n      \"Acceptance Criteria: Login locks after 5 attempts.\",\n      \"HIPAA: Security Requirements (P59, VI.A. Administrative procedures - documented, formal practices to manage security measures and personnel conduct; implicitly covers account management policies to protect data from unauthorized access attempts).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Patient Vital Signs Entry and Validation with Timestamp and Patient ID\",\n    \"preconditions\": [\n      \"An authorized doctor or nurse user is logged into MediTrack.\",\n      \"A patient record exists for vital sign entry.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section for a specific patient.\",\n      \"Attempt to enter a Heart Rate value outside the valid range (e.g., 20 bpm).\",\n      \"Attempt to enter a Temperature value outside the valid range (e.g., 90 °F).\",\n      \"Enter valid values for Heart Rate (e.g., 75 bpm), Blood Pressure (e.g., 120/80 mmHg), and Temperature (e.g., 98.6 °F).\",\n      \"Click the 'Save' button.\",\n      \"Retrieve the saved vital entry and verify its details, including the patient ID and system-generated timestamp.\"\n    ],\n    \"expected\": \"The system should display an error message for vital signs entered outside the specified valid ranges (HR 30–200 bpm, Temp 95–107 °F). Valid vital sign entries should be successfully saved, associated with the correct patient ID, and include an accurate timestamp of the entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction and data entry, API tool/database query for verifying saved data, patient ID, and timestamp.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-2.1: The system shall allow entry of vitals: Heart Rate, Blood Pressure, Temperature.\",\n      \"FR-2.2: The system shall validate values (e.g., HR 30–200 bpm, Temp 95–107 °F).\",\n      \"FR-2.3: The system shall save each entry with timestamp and patient ID.\",\n      \"Acceptance Criteria: Patient vitals accept only valid ranges; invalid inputs trigger error messages.\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - vital signs are PHI).\",\n      \"HIPAA: Security Requirements (P59, VI.A. Administrative procedures, P60, B. Physical safeguards, P60, B. Technical security services - controlling individual access to information), (P13, V.A.2. Minimum Necessary Rule - ensuring only necessary data is collected and processed).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-ALERT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Abnormal Vitals Alert - Red Warning Icon and Email Notification without Duplication\",\n    \"preconditions\": [\n      \"An authorized doctor or nurse user is logged into MediTrack.\",\n      \"A patient record exists with an assigned doctor.\",\n      \"The system's email notification service is configured and operational.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section for a specific patient.\",\n      \"Enter a Heart Rate value that is outside the normal range (e.g., 25 bpm), making it abnormal.\",\n      \"Enter Blood Pressure and Temperature within normal ranges.\",\n      \"Click the 'Save' button.\",\n      \"Observe the patient's vital signs display in the system.\",\n      \"Check the assigned doctor's email inbox for an alert.\",\n      \"Save the same abnormal vital sign again immediately.\",\n      \"Check the assigned doctor's email inbox again for a new alert.\"\n    ],\n    \"expected\": \"Upon saving abnormal vital signs, a red warning icon should appear next to the abnormal vital in the system's display. An email alert containing the abnormal entry details should be sent to the assigned doctor. No duplicate email alerts should be sent for the same abnormal entry within a short period, demonstrating single alert trigger per abnormal entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, email testing tool/API for verifying email receipt and content, backend monitoring for alert triggering logic.\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"FR-3.1: The system shall display a red warning icon next to abnormal vitals.\",\n      \"FR-3.2: The system shall send an email alert to the assigned doctor for abnormal entries.\",\n      \"FR-3.3: Alerts shall trigger only once per abnormal entry (no duplicates).\",\n      \"Acceptance Criteria: Abnormal vitals trigger alerts and email notifications without duplication.\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - vital signs are PHI).\",\n      \"HIPAA: Uses and Disclosures to Carry Out Treatment, Payment, or Health Care Operations (P18, V.C. - PHI may be used/disclosed for treatment/healthcare operations without explicit authorization in certain cases, which sending alerts to assigned doctors for abnormal vitals would fall under).\",\n      \"HIPAA: Minimum Necessary Rule (P13, V.A.2.; P36, G.2. - PHI disclosed in email alerts should be limited to the minimum necessary to achieve the purpose of the alert).\",\n      \"HIPAA: Security Requirements (P60, B. Technical security mechanisms - data transmitted over a network, such as email, should be encrypted).\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REPORT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Patient Health Report Generation in PDF Format with Date Range Filtering\",\n    \"preconditions\": [\n      \"An authorized doctor or nurse user is logged into MediTrack.\",\n      \"A patient record exists with multiple vital sign entries spanning several dates.\",\n      \"The system's report generation module is operational.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Health Report Generation' section.\",\n      \"Select a patient for whom to generate a report.\",\n      \"Specify a date range that includes some, but not all, of the patient's vital sign entries (e.g., last 30 days).\",\n      \"Initiate the report generation process.\",\n      \"Download the generated report.\",\n      \"Open the downloaded report and verify its format.\",\n      \"Verify that the report includes the patient's details.\",\n      \"Verify that the report includes all vital signs recorded only within the specified date range and no entries outside it.\"\n    ],\n    \"expected\": \"The system should successfully generate and download a report in PDF format. The report should accurately display the selected patient's details and all vital signs recorded *only* within the specified date range. Vital entries outside the chosen date range should not be present in the report.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium for UI interaction, PDF parsing library for content verification, API tool for data validation against the database.\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"FR-4.1: Reports shall include patient details and all vitals recorded in a given date range.\",\n      \"FR-4.2: Reports shall be generated in PDF format.\",\n      \"FR-4.3: Users shall be able to filter reports by date range.\",\n      \"Acceptance Criteria: Reports generate correctly in PDF, with accurate patient details and date filtering.\",\n      \"HIPAA: Privacy of Health Information (P12, V. Protected health information definition - patient details and vitals are PHI).\",\n      \"HIPAA: Access of Individuals to PHI (P47, J.1.a - individuals have a right of access to inspect and obtain a copy of PHI). This implies the system must be able to generate reports containing PHI for the individual or authorized personnel.\",\n      \"HIPAA: Provision of Access (P47, J.3.b.i Form of Access Requested - The Covered Entity must provide the access in the form or format requested by the individual, if readily producible; PDF is a specific, producible format).\",\n      \"HIPAA: Security Requirements (P59, VI. Security Requirements - general security applies to electronic PHI; P60, B. Technical security services - encryption of data at rest, P60, B. Technical security mechanisms - encryption for data in transit).\"\n    ]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 16497,
+      "candidatesTokenCount": 2850,
+      "totalTokenCount": 22240,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 243
+        },
+        {
+          "modality": "DOCUMENT",
+          "tokenCount": 16254
+        }
+      ],
+      "thoughtsTokenCount": 2893
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "VH0GacqfE-eNg8UP5bbyiAk"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide minimum 2 testcases. Decide the max number of testcases based on the size of the requirements. You are free to produce as many testcases as required. Use req_id: REQ-1762008120379-248.\n\nAdditional user instructions:\nGenerate 5 testcases instead of 4"
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1762008120379-248\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/kk8kj49bdjuc"
+            }
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/1ctqa4ucb92e"
+            }
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

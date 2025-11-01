@@ -1,0 +1,116 @@
+[
+  {
+    "tc_id": "TC-AUTH-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify successful login for a registered user (Doctor/Nurse)",
+    "preconditions": [
+      "A registered user account (e.g., doctor or nurse) exists with a valid email and password.",
+      "The MediTrack web application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the 'Email' field.",
+      "Enter the corresponding valid password in the 'Password' field.",
+      "Click the 'Login' button."
+    ],
+    "expected": "The user should be successfully logged in and redirected to their dashboard/home page.",
+    "automatable": true,
+    "suggested_tool": "Selenium, Cypress",
+    "confidence": 1.0,
+    "compliance": ["HIPAA (M.3.a - Safeguards)", "HIPAA (VI.B - Technical Security Services)"]
+  },
+  {
+    "tc_id": "TC-AUTH-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify account lockout after multiple failed login attempts",
+    "preconditions": [
+      "A registered user account exists with a valid email.",
+      "The MediTrack web application is accessible.",
+      "The user account is not currently locked."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the 'Email' field.",
+      "Enter an invalid password in the 'Password' field.",
+      "Click the 'Login' button.",
+      "Repeat steps 3-4 five more times (total of 6 failed attempts)."
+    ],
+    "expected": "After each failed attempt (up to 5), an error message indicating invalid credentials should be displayed. After the 6th failed attempt, an error message stating the account is locked for 15 minutes should be displayed. Attempts to log in again within 15 minutes using correct credentials should fail, with an account locked message.",
+    "automatable": true,
+    "suggested_tool": "Selenium, Cypress",
+    "confidence": 1.0,
+    "compliance": ["HIPAA (FR-1.3 - Account Lockout)", "HIPAA (M.3.a - Safeguards)", "HIPAA (VI.B - Technical Security Services)"]
+  },
+  {
+    "tc_id": "TC-AUTH-003",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify password input is not visible in plain text",
+    "preconditions": [
+      "The MediTrack web application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a password in the 'Password' field.",
+      "Observe the input field."
+    ],
+    "expected": "The entered password characters should be masked (e.g., displayed as asterisks or dots) and not visible in plain text.",
+    "automatable": true,
+    "suggested_tool": "Selenium, Cypress (check input type attribute)",
+    "confidence": 1.0,
+    "compliance": ["HIPAA (FR-1.2 - Passwords encrypted)", "HIPAA (NFR-2 - Data in transit)", "HIPAA (M.3.a - Safeguards)", "HIPAA (VI.B - Technical Security Services)"]
+  },
+  {
+    "tc_id": "TC-VITAL-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify authorized user can enter valid patient vitals (Heart Rate, Blood Pressure, Temperature)",
+    "preconditions": [
+      "An authorized user (e.g., doctor or nurse) is logged into the MediTrack application.",
+      "A patient record exists with a valid Patient ID.",
+      "The patient vitals entry screen is accessible."
+    ],
+    "steps": [
+      "Navigate to the patient vitals entry screen for a specific Patient ID.",
+      "Enter Heart Rate: 75 bpm (within 30–200 bpm range).",
+      "Enter Blood Pressure: 120/80 mmHg.",
+      "Enter Temperature: 98.6 °F (within 95–107 °F range).",
+      "Click the 'Save' button.",
+      "Navigate to the patient's historical vitals view."
+    ],
+    "expected": "The system should successfully save the entered vitals. A confirmation message should be displayed. The newly entered vitals should be visible in the patient's historical records, associated with the correct Patient ID and a system-generated timestamp.",
+    "automatable": true,
+    "suggested_tool": "Selenium, Cypress, API testing",
+    "confidence": 0.9,
+    "compliance": ["HIPAA (FR-2.1, FR-2.2, FR-2.3 - Vitals Entry & Validation)", "HIPAA (V.A.1 - Use and Disclosure of PHI)", "HIPAA (M.3.a - Safeguards)"]
+  },
+  {
+    "tc_id": "TC-ALERT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify abnormal vitals trigger a red warning icon and a non-duplicate email alert to the assigned doctor",
+    "preconditions": [
+      "An authorized user (e.g., nurse) is logged into the MediTrack application.",
+      "A patient record exists with a valid Patient ID and an assigned doctor with a valid email address.",
+      "The patient vitals entry screen is accessible.",
+      "The system is configured to send email alerts."
+    ],
+    "steps": [
+      "Navigate to the patient vitals entry screen for the specific Patient ID.",
+      "Enter Heart Rate: 210 bpm (abnormal, outside 30–200 bpm range).",
+      "Enter Blood Pressure: 180/120 mmHg.",
+      "Enter Temperature: 108 °F (abnormal, outside 95–107 °F range).",
+      "Click the 'Save' button.",
+      "Observe the vitals display (e.g., dashboard or patient details view).",
+      "Check the assigned doctor's email inbox.",
+      "Attempt to save the *same* abnormal vital entries again for the same patient immediately after the first save."
+    ],
+    "expected": "The system should save the abnormal vitals. A red warning icon should be displayed next to the abnormal vital entries. An email alert should be sent to the assigned doctor, detailing the abnormal vitals for the patient. The email alert should be sent only once for this specific set of abnormal entries (no duplicate alerts for the same condition).",
+    "automatable": true,
+    "suggested_tool": "Selenium, Cypress, Mailosaur/Mailtrap, API testing",
+    "confidence": 0.9,
+    "compliance": ["HIPAA (FR-3.1, FR-3.2, FR-3.3 - Abnormal Vitals Alert)", "HIPAA (V.A.1 - Use and Disclosure of PHI for Treatment)", "HIPAA (M.3.a - Safeguards)", "HIPAA (NFR-2 - Data in transit)"]
+  }
+]

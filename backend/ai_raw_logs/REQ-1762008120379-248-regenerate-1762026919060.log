@@ -1,0 +1,248 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TCC-AUTH-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify successful user login with valid credentials.",
+    "preconditions": [
+      "A valid doctor/nurse user account (e.g., 'test.doctor@meditrack.com', 'password123') exists in the system.",
+      "User account is not locked.",
+      "System is accessible via a supported web browser (Chrome, Edge, or Safari)."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the 'Email' field.",
+      "Enter the corresponding valid password in the 'Password' field.",
+      "Click the 'Login' button."
+    ],
+    "expected": "The user is successfully logged in and redirected to their dashboard.",
+    "automatable": true,
+    "suggested_tool": "Playwright",
+    "confidence": 1.0,
+    "compliance": [
+      "HIPAA VI.B. Technical security services",
+      "HIPAA M.3. Safeguards"
+    ]
+  },
+  {
+    "tc_id": "TCC-AUTH-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify account lockout after more than 5 failed login attempts.",
+    "preconditions": [
+      "A valid user account (e.g., 'lock.me@meditrack.com') exists in the system.",
+      "User account is not locked.",
+      "System is accessible via a supported web browser (Chrome, Edge, or Safari)."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter the valid email address 'lock.me@meditrack.com' in the 'Email' field.",
+      "Enter an invalid password in the 'Password' field.",
+      "Click the 'Login' button.",
+      "Repeat steps 2-4 five more times (total 6 attempts)."
+    ],
+    "expected": "After the 6th failed attempt, an error message indicating the account is locked is displayed, and the account remains locked for 15 minutes.",
+    "automatable": true,
+    "suggested_tool": "Playwright",
+    "confidence": 1.0,
+    "compliance": [
+      "HIPAA VI.B. Technical security services",
+      "HIPAA M.3. Safeguards"
+    ]
+  },
+  {
+    "tc_id": "TCC-VITALS-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify the system allows entry of valid patient vitals and rejects invalid vitals.",
+    "preconditions": [
+      "An authorized doctor/nurse user is logged in.",
+      "A patient record exists (e.g., Patient ID: 'P-101').",
+      "The user is on the patient vitals entry screen for Patient ID 'P-101'."
+    ],
+    "steps": [
+      "Enter '120' for Heart Rate (valid: 30-200 bpm).",
+      "Enter '120/80' for Blood Pressure (valid format, assuming BP is accepted as a single string field).",
+      "Enter '98.6' for Temperature (valid: 95-107 °F).",
+      "Click 'Save Vitals'.",
+      "Attempt to enter '25' for Heart Rate (invalid: < 30).",
+      "Click 'Save Vitals'.",
+      "Attempt to enter '108' for Temperature (invalid: > 107).",
+      "Click 'Save Vitals'."
+    ],
+    "expected": "Steps 1-4: Vitals are successfully saved for Patient ID 'P-101' with a timestamp. Step 6: An error message is displayed for invalid Heart Rate. Step 8: An error message is displayed for invalid Temperature.",
+    "automatable": true,
+    "suggested_tool": "Playwright",
+    "confidence": 0.9,
+    "compliance": [
+      "HIPAA V.A.2. Minimum Necessary Rule",
+      "HIPAA M.3. Safeguards",
+      "HIPAA VI.B. Technical security mechanisms"
+    ]
+  },
+  {
+    "tc_id": "TCC-ALERT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify the system displays a warning icon and sends an email alert for abnormal vitals without duplication.",
+    "preconditions": [
+      "An authorized doctor/nurse user is logged in.",
+      "A patient record exists (e.g., Patient ID: 'P-102') assigned to 'Dr. Smith'.",
+      "The user is on the patient vitals entry screen for Patient ID 'P-102'.",
+      "'Dr. Smith''s email ('dr.smith@meditrack.com') is configured to receive alerts.",
+      "Abnormal vital ranges are defined (e.g., HR > 150 bpm is abnormal)."
+    ],
+    "steps": [
+      "Enter '160' for Heart Rate (abnormal value).",
+      "Enter '120/80' for Blood Pressure (normal value).",
+      "Enter '98.6' for Temperature (normal value).",
+      "Click 'Save Vitals'.",
+      "Observe the patient vitals display for Patient ID 'P-102'.",
+      "Check 'Dr. Smith''s email inbox for an alert.",
+      "Re-enter the same abnormal Heart Rate '160' and save vitals again.",
+      "Check 'Dr. Smith''s email inbox again."
+    ],
+    "expected": "Step 5: A red warning icon is displayed next to the Heart Rate value for Patient ID 'P-102'. Step 6: An email alert is sent to 'dr.smith@meditrack.com' regarding the abnormal Heart Rate for Patient ID 'P-102'. Step 8: No duplicate email alert is sent for the same abnormal entry.",
+    "automatable": true,
+    "suggested_tool": "Playwright, MailHog/GreenMail",
+    "confidence": 0.8,
+    "compliance": [
+      "HIPAA V.A.2. Minimum Necessary Rule",
+      "HIPAA M.3. Safeguards",
+      "HIPAA VI.B. Technical security services",
+      "HIPAA VI.B. Technical security mechanisms"
+    ]
+  },
+  {
+    "tc_id": "TCC-REPORT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify patient health reports are generated in PDF format, including patient details and vitals within a specified date range.",
+    "preconditions": [
+      "An authorized doctor/nurse user is logged in.",
+      "A patient record exists (e.g., Patient ID: 'P-103') with multiple vital entries recorded over a period (e.g., from Jan 1, 2025 to Jan 31, 2025).",
+      "The user is on the 'Generate Report' screen.",
+      "System is accessible via a supported web browser (Chrome, Edge, or Safari)."
+    ],
+    "steps": [
+      "Select Patient ID 'P-103'.",
+      "Set 'Start Date' to '2025-01-01'.",
+      "Set 'End Date' to '2025-01-15'.",
+      "Click the 'Generate Report' button.",
+      "Download the generated report.",
+      "Open the downloaded report file."
+    ],
+    "expected": "Step 5: A PDF file named 'Patient_P-103_Report_2025-01-01_to_2025-01-15.pdf' (or similar) is downloaded. Step 6: The PDF report opens successfully, displays patient 'P-103''s details, and contains all vital entries recorded only between 2025-01-01 and 2025-01-15.",
+    "automatable": true,
+    "suggested_tool": "Playwright, PDF parsing library",
+    "confidence": 0.9,
+    "compliance": [
+      "HIPAA V.A.1. Use and Disclosure",
+      "HIPAA V.A.2. Minimum Necessary Rule",
+      "HIPAA M.3. Safeguards",
+      "HIPAA VI.B. Technical security services",
+      "HIPAA VI.B. Technical security mechanisms"
+    ]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TCC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials.\",\n    \"preconditions\": [\n      \"A valid doctor/nurse user account (e.g., 'test.doctor@meditrack.com', 'password123') exists in the system.\",\n      \"User account is not locked.\",\n      \"System is accessible via a supported web browser (Chrome, Edge, or Safari).\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter the corresponding valid password in the 'Password' field.\",\n      \"Click the 'Login' button.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to their dashboard.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA M.3. Safeguards\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify account lockout after more than 5 failed login attempts.\",\n    \"preconditions\": [\n      \"A valid user account (e.g., 'lock.me@meditrack.com') exists in the system.\",\n      \"User account is not locked.\",\n      \"System is accessible via a supported web browser (Chrome, Edge, or Safari).\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter the valid email address 'lock.me@meditrack.com' in the 'Email' field.\",\n      \"Enter an invalid password in the 'Password' field.\",\n      \"Click the 'Login' button.\",\n      \"Repeat steps 2-4 five more times (total 6 attempts).\"\n    ],\n    \"expected\": \"After the 6th failed attempt, an error message indicating the account is locked is displayed, and the account remains locked for 15 minutes.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA M.3. Safeguards\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify the system allows entry of valid patient vitals and rejects invalid vitals.\",\n    \"preconditions\": [\n      \"An authorized doctor/nurse user is logged in.\",\n      \"A patient record exists (e.g., Patient ID: 'P-101').\",\n      \"The user is on the patient vitals entry screen for Patient ID 'P-101'.\"\n    ],\n    \"steps\": [\n      \"Enter '120' for Heart Rate (valid: 30-200 bpm).\",\n      \"Enter '120/80' for Blood Pressure (valid format, assuming BP is accepted as a single string field).\",\n      \"Enter '98.6' for Temperature (valid: 95-107 °F).\",\n      \"Click 'Save Vitals'.\",\n      \"Attempt to enter '25' for Heart Rate (invalid: < 30).\",\n      \"Click 'Save Vitals'.\",\n      \"Attempt to enter '108' for Temperature (invalid: > 107).\",\n      \"Click 'Save Vitals'.\"\n    ],\n    \"expected\": \"Steps 1-4: Vitals are successfully saved for Patient ID 'P-101' with a timestamp. Step 6: An error message is displayed for invalid Heart Rate. Step 8: An error message is displayed for invalid Temperature.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"HIPAA V.A.2. Minimum Necessary Rule\",\n      \"HIPAA M.3. Safeguards\",\n      \"HIPAA VI.B. Technical security mechanisms\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-ALERT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify the system displays a warning icon and sends an email alert for abnormal vitals without duplication.\",\n    \"preconditions\": [\n      \"An authorized doctor/nurse user is logged in.\",\n      \"A patient record exists (e.g., Patient ID: 'P-102') assigned to 'Dr. Smith'.\",\n      \"The user is on the patient vitals entry screen for Patient ID 'P-102'.\",\n      \"'Dr. Smith''s email ('dr.smith@meditrack.com') is configured to receive alerts.\",\n      \"Abnormal vital ranges are defined (e.g., HR > 150 bpm is abnormal).\"\n    ],\n    \"steps\": [\n      \"Enter '160' for Heart Rate (abnormal value).\",\n      \"Enter '120/80' for Blood Pressure (normal value).\",\n      \"Enter '98.6' for Temperature (normal value).\",\n      \"Click 'Save Vitals'.\",\n      \"Observe the patient vitals display for Patient ID 'P-102'.\",\n      \"Check 'Dr. Smith''s email inbox for an alert.\",\n      \"Re-enter the same abnormal Heart Rate '160' and save vitals again.\",\n      \"Check 'Dr. Smith''s email inbox again.\"\n    ],\n    \"expected\": \"Step 5: A red warning icon is displayed next to the Heart Rate value for Patient ID 'P-102'. Step 6: An email alert is sent to 'dr.smith@meditrack.com' regarding the abnormal Heart Rate for Patient ID 'P-102'. Step 8: No duplicate email alert is sent for the same abnormal entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, MailHog/GreenMail\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"HIPAA V.A.2. Minimum Necessary Rule\",\n      \"HIPAA M.3. Safeguards\",\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA VI.B. Technical security mechanisms\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-REPORT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify patient health reports are generated in PDF format, including patient details and vitals within a specified date range.\",\n    \"preconditions\": [\n      \"An authorized doctor/nurse user is logged in.\",\n      \"A patient record exists (e.g., Patient ID: 'P-103') with multiple vital entries recorded over a period (e.g., from Jan 1, 2025 to Jan 31, 2025).\",\n      \"The user is on the 'Generate Report' screen.\",\n      \"System is accessible via a supported web browser (Chrome, Edge, or Safari).\"\n    ],\n    \"steps\": [\n      \"Select Patient ID 'P-103'.\",\n      \"Set 'Start Date' to '2025-01-01'.\",\n      \"Set 'End Date' to '2025-01-15'.\",\n      \"Click the 'Generate Report' button.\",\n      \"Download the generated report.\",\n      \"Open the downloaded report file.\"\n    ],\n    \"expected\": \"Step 5: A PDF file named 'Patient_P-103_Report_2025-01-01_to_2025-01-15.pdf' (or similar) is downloaded. Step 6: The PDF report opens successfully, displays patient 'P-103''s details, and contains all vital entries recorded only between 2025-01-01 and 2025-01-15.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, PDF parsing library\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"HIPAA V.A.1. Use and Disclosure\",\n      \"HIPAA V.A.2. Minimum Necessary Rule\",\n      \"HIPAA M.3. Safeguards\",\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA VI.B. Technical security mechanisms\"\n    ]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 750,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 6587,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 16470,
+    "outputTokens": 2135,
+    "thoughtsTokens": 4794,
+    "totalTokens": 23399
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TCC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials.\",\n    \"preconditions\": [\n      \"A valid doctor/nurse user account (e.g., 'test.doctor@meditrack.com', 'password123') exists in the system.\",\n      \"User account is not locked.\",\n      \"System is accessible via a supported web browser (Chrome, Edge, or Safari).\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter the corresponding valid password in the 'Password' field.\",\n      \"Click the 'Login' button.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to their dashboard.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA M.3. Safeguards\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify account lockout after more than 5 failed login attempts.\",\n    \"preconditions\": [\n      \"A valid user account (e.g., 'lock.me@meditrack.com') exists in the system.\",\n      \"User account is not locked.\",\n      \"System is accessible via a supported web browser (Chrome, Edge, or Safari).\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter the valid email address 'lock.me@meditrack.com' in the 'Email' field.\",\n      \"Enter an invalid password in the 'Password' field.\",\n      \"Click the 'Login' button.\",\n      \"Repeat steps 2-4 five more times (total 6 attempts).\"\n    ],\n    \"expected\": \"After the 6th failed attempt, an error message indicating the account is locked is displayed, and the account remains locked for 15 minutes.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA M.3. Safeguards\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify the system allows entry of valid patient vitals and rejects invalid vitals.\",\n    \"preconditions\": [\n      \"An authorized doctor/nurse user is logged in.\",\n      \"A patient record exists (e.g., Patient ID: 'P-101').\",\n      \"The user is on the patient vitals entry screen for Patient ID 'P-101'.\"\n    ],\n    \"steps\": [\n      \"Enter '120' for Heart Rate (valid: 30-200 bpm).\",\n      \"Enter '120/80' for Blood Pressure (valid format, assuming BP is accepted as a single string field).\",\n      \"Enter '98.6' for Temperature (valid: 95-107 °F).\",\n      \"Click 'Save Vitals'.\",\n      \"Attempt to enter '25' for Heart Rate (invalid: < 30).\",\n      \"Click 'Save Vitals'.\",\n      \"Attempt to enter '108' for Temperature (invalid: > 107).\",\n      \"Click 'Save Vitals'.\"\n    ],\n    \"expected\": \"Steps 1-4: Vitals are successfully saved for Patient ID 'P-101' with a timestamp. Step 6: An error message is displayed for invalid Heart Rate. Step 8: An error message is displayed for invalid Temperature.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"HIPAA V.A.2. Minimum Necessary Rule\",\n      \"HIPAA M.3. Safeguards\",\n      \"HIPAA VI.B. Technical security mechanisms\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-ALERT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify the system displays a warning icon and sends an email alert for abnormal vitals without duplication.\",\n    \"preconditions\": [\n      \"An authorized doctor/nurse user is logged in.\",\n      \"A patient record exists (e.g., Patient ID: 'P-102') assigned to 'Dr. Smith'.\",\n      \"The user is on the patient vitals entry screen for Patient ID 'P-102'.\",\n      \"'Dr. Smith''s email ('dr.smith@meditrack.com') is configured to receive alerts.\",\n      \"Abnormal vital ranges are defined (e.g., HR > 150 bpm is abnormal).\"\n    ],\n    \"steps\": [\n      \"Enter '160' for Heart Rate (abnormal value).\",\n      \"Enter '120/80' for Blood Pressure (normal value).\",\n      \"Enter '98.6' for Temperature (normal value).\",\n      \"Click 'Save Vitals'.\",\n      \"Observe the patient vitals display for Patient ID 'P-102'.\",\n      \"Check 'Dr. Smith''s email inbox for an alert.\",\n      \"Re-enter the same abnormal Heart Rate '160' and save vitals again.\",\n      \"Check 'Dr. Smith''s email inbox again.\"\n    ],\n    \"expected\": \"Step 5: A red warning icon is displayed next to the Heart Rate value for Patient ID 'P-102'. Step 6: An email alert is sent to 'dr.smith@meditrack.com' regarding the abnormal Heart Rate for Patient ID 'P-102'. Step 8: No duplicate email alert is sent for the same abnormal entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, MailHog/GreenMail\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"HIPAA V.A.2. Minimum Necessary Rule\",\n      \"HIPAA M.3. Safeguards\",\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA VI.B. Technical security mechanisms\"\n    ]\n  },\n  {\n    \"tc_id\": \"TCC-REPORT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify patient health reports are generated in PDF format, including patient details and vitals within a specified date range.\",\n    \"preconditions\": [\n      \"An authorized doctor/nurse user is logged in.\",\n      \"A patient record exists (e.g., Patient ID: 'P-103') with multiple vital entries recorded over a period (e.g., from Jan 1, 2025 to Jan 31, 2025).\",\n      \"The user is on the 'Generate Report' screen.\",\n      \"System is accessible via a supported web browser (Chrome, Edge, or Safari).\"\n    ],\n    \"steps\": [\n      \"Select Patient ID 'P-103'.\",\n      \"Set 'Start Date' to '2025-01-01'.\",\n      \"Set 'End Date' to '2025-01-15'.\",\n      \"Click the 'Generate Report' button.\",\n      \"Download the generated report.\",\n      \"Open the downloaded report file.\"\n    ],\n    \"expected\": \"Step 5: A PDF file named 'Patient_P-103_Report_2025-01-01_to_2025-01-15.pdf' (or similar) is downloaded. Step 6: The PDF report opens successfully, displays patient 'P-103''s details, and contains all vital entries recorded only between 2025-01-01 and 2025-01-15.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, PDF parsing library\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"HIPAA V.A.1. Use and Disclosure\",\n      \"HIPAA V.A.2. Minimum Necessary Rule\",\n      \"HIPAA M.3. Safeguards\",\n      \"HIPAA VI.B. Technical security services\",\n      \"HIPAA VI.B. Technical security mechanisms\"\n    ]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 16470,
+      "candidatesTokenCount": 2135,
+      "totalTokenCount": 23399,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 216
+        },
+        {
+          "modality": "DOCUMENT",
+          "tokenCount": 16254
+        }
+      ],
+      "thoughtsTokenCount": 4794
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "pmUGabHHNa7IjuMP_tqh2Ag"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide 2-8 testcases. Use req_id: REQ-1762008120379-248.\n\nAdditional user instructions:\ncreate 5 testcases not 4"
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1762008120379-248\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/kk8kj49bdjuc"
+            }
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/1ctqa4ucb92e"
+            }
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

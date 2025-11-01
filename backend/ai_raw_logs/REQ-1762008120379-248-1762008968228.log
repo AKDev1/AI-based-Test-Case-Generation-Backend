@@ -1,0 +1,158 @@
+--- RAW RESPONSE ---
+```json
+[
+  {
+    "tc_id": "TC-1762008120379-248-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify data confidentiality for PHI according to HIPAA",
+    "preconditions": [],
+    "steps": [
+      "As an authorized user, attempt to access sensitive patient health information (PHI) within MediTrack.",
+      "Attempt to export or share PHI with an unauthorized external system or user without proper consent/authorization."
+    ],
+    "expected": "The system shall prevent unauthorized access, export, or sharing of PHI. Access controls and data handling mechanisms must enforce confidentiality per HIPAA.",
+    "automatable": false,
+    "suggested_tool": "Manual review, security audit tools",
+    "confidence": 0.6,
+    "compliance": ["HIPAA Security Rule", "HIPAA Privacy Rule"]
+  },
+  {
+    "tc_id": "TC-1762008120379-248-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify data integrity for PHI in MediTrack",
+    "preconditions": [],
+    "steps": [
+      "As an authorized user, create or modify a patient record containing PHI.",
+      "Verify that the data is accurately stored and retrieved without unauthorized alteration.",
+      "Attempt to maliciously alter PHI without proper logging or audit trails."
+    ],
+    "expected": "The system shall maintain the integrity of PHI, ensuring data is not improperly altered or destroyed. Any changes must be accurately recorded in audit logs and protected from unauthorized modification.",
+    "automatable": false,
+    "suggested_tool": "Manual testing, database integrity checks, audit log analysis",
+    "confidence": 0.6,
+    "compliance": ["HIPAA Security Rule"]
+  },
+  {
+    "tc_id": "TC-1762008120379-248-003",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify audit logging for access to PHI",
+    "preconditions": [],
+    "steps": [
+      "As a user, log into MediTrack and access various patient PHI records.",
+      "Log out.",
+      "As an administrator, review the system's audit logs for the actions performed by the user."
+    ],
+    "expected": "All accesses to PHI, including user logins and specific record views, shall be recorded in an unalterable audit log, including user ID, timestamp, and action, in compliance with HIPAA.",
+    "automatable": true,
+    "suggested_tool": "Automated UI interaction, log parsing tools",
+    "confidence": 0.7,
+    "compliance": ["HIPAA Security Rule"]
+  },
+  {
+    "tc_id": "TC-1762008120379-248-004",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify role-based access control for PHI",
+    "preconditions": [
+      "A user with limited access rights (e.g., non-clinical staff) exists.",
+      "A user with full access rights (e.g., physician) exists."
+    ],
+    "steps": [
+      "As a user with limited access, attempt to view or modify sensitive PHI for which they are not authorized.",
+      "As a user with full access, verify successful viewing and modification of sensitive PHI appropriate for their role."
+    ],
+    "expected": "The system shall enforce role-based access controls, allowing users to access only the minimum necessary PHI required for their role, as mandated by HIPAA. Unauthorized access attempts must be denied and logged.",
+    "automatable": true,
+    "suggested_tool": "UI automation frameworks (e.g., Selenium, Playwright), API testing",
+    "confidence": 0.7,
+    "compliance": ["HIPAA Security Rule", "HIPAA Privacy Rule"]
+  }
+]
+```
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "```json\n[\n  {\n    \"tc_id\": \"TC-1762008120379-248-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify data confidentiality for PHI according to HIPAA\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"As an authorized user, attempt to access sensitive patient health information (PHI) within MediTrack.\",\n      \"Attempt to export or share PHI with an unauthorized external system or user without proper consent/authorization.\"\n    ],\n    \"expected\": \"The system shall prevent unauthorized access, export, or sharing of PHI. Access controls and data handling mechanisms must enforce confidentiality per HIPAA.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review, security audit tools\",\n    \"confidence\": 0.6,\n    \"compliance\": [\"HIPAA Security Rule\", \"HIPAA Privacy Rule\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify data integrity for PHI in MediTrack\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"As an authorized user, create or modify a patient record containing PHI.\",\n      \"Verify that the data is accurately stored and retrieved without unauthorized alteration.\",\n      \"Attempt to maliciously alter PHI without proper logging or audit trails.\"\n    ],\n    \"expected\": \"The system shall maintain the integrity of PHI, ensuring data is not improperly altered or destroyed. Any changes must be accurately recorded in audit logs and protected from unauthorized modification.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual testing, database integrity checks, audit log analysis\",\n    \"confidence\": 0.6,\n    \"compliance\": [\"HIPAA Security Rule\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-003\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify audit logging for access to PHI\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"As a user, log into MediTrack and access various patient PHI records.\",\n      \"Log out.\",\n      \"As an administrator, review the system's audit logs for the actions performed by the user.\"\n    ],\n    \"expected\": \"All accesses to PHI, including user logins and specific record views, shall be recorded in an unalterable audit log, including user ID, timestamp, and action, in compliance with HIPAA.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Automated UI interaction, log parsing tools\",\n    \"confidence\": 0.7,\n    \"compliance\": [\"HIPAA Security Rule\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-004\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify role-based access control for PHI\",\n    \"preconditions\": [\n      \"A user with limited access rights (e.g., non-clinical staff) exists.\",\n      \"A user with full access rights (e.g., physician) exists.\"\n    ],\n    \"steps\": [\n      \"As a user with limited access, attempt to view or modify sensitive PHI for which they are not authorized.\",\n      \"As a user with full access, verify successful viewing and modification of sensitive PHI appropriate for their role.\"\n    ],\n    \"expected\": \"The system shall enforce role-based access controls, allowing users to access only the minimum necessary PHI required for their role, as mandated by HIPAA. Unauthorized access attempts must be denied and logged.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"UI automation frameworks (e.g., Selenium, Playwright), API testing\",\n    \"confidence\": 0.7,\n    \"compliance\": [\"HIPAA Security Rule\", \"HIPAA Privacy Rule\"]\n  }\n]\n```"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 680,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 3501,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 182,
+    "outputTokens": 1034,
+    "thoughtsTokens": 3103,
+    "totalTokens": 4319
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "```json\n[\n  {\n    \"tc_id\": \"TC-1762008120379-248-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify data confidentiality for PHI according to HIPAA\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"As an authorized user, attempt to access sensitive patient health information (PHI) within MediTrack.\",\n      \"Attempt to export or share PHI with an unauthorized external system or user without proper consent/authorization.\"\n    ],\n    \"expected\": \"The system shall prevent unauthorized access, export, or sharing of PHI. Access controls and data handling mechanisms must enforce confidentiality per HIPAA.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review, security audit tools\",\n    \"confidence\": 0.6,\n    \"compliance\": [\"HIPAA Security Rule\", \"HIPAA Privacy Rule\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify data integrity for PHI in MediTrack\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"As an authorized user, create or modify a patient record containing PHI.\",\n      \"Verify that the data is accurately stored and retrieved without unauthorized alteration.\",\n      \"Attempt to maliciously alter PHI without proper logging or audit trails.\"\n    ],\n    \"expected\": \"The system shall maintain the integrity of PHI, ensuring data is not improperly altered or destroyed. Any changes must be accurately recorded in audit logs and protected from unauthorized modification.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual testing, database integrity checks, audit log analysis\",\n    \"confidence\": 0.6,\n    \"compliance\": [\"HIPAA Security Rule\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-003\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify audit logging for access to PHI\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"As a user, log into MediTrack and access various patient PHI records.\",\n      \"Log out.\",\n      \"As an administrator, review the system's audit logs for the actions performed by the user.\"\n    ],\n    \"expected\": \"All accesses to PHI, including user logins and specific record views, shall be recorded in an unalterable audit log, including user ID, timestamp, and action, in compliance with HIPAA.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Automated UI interaction, log parsing tools\",\n    \"confidence\": 0.7,\n    \"compliance\": [\"HIPAA Security Rule\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-004\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify role-based access control for PHI\",\n    \"preconditions\": [\n      \"A user with limited access rights (e.g., non-clinical staff) exists.\",\n      \"A user with full access rights (e.g., physician) exists.\"\n    ],\n    \"steps\": [\n      \"As a user with limited access, attempt to view or modify sensitive PHI for which they are not authorized.\",\n      \"As a user with full access, verify successful viewing and modification of sensitive PHI appropriate for their role.\"\n    ],\n    \"expected\": \"The system shall enforce role-based access controls, allowing users to access only the minimum necessary PHI required for their role, as mandated by HIPAA. Unauthorized access attempts must be denied and logged.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"UI automation frameworks (e.g., Selenium, Playwright), API testing\",\n    \"confidence\": 0.7,\n    \"compliance\": [\"HIPAA Security Rule\", \"HIPAA Privacy Rule\"]\n  }\n]\n```"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 182,
+      "candidatesTokenCount": 1034,
+      "totalTokenCount": 4319,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 182
+        }
+      ],
+      "thoughtsTokenCount": 3103
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "hx8GaZ-JMtqxjuMPg82e4A0"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide 2-8 testcases. Use req_id provided."
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1762008120379-248\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

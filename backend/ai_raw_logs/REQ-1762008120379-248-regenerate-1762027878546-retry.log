@@ -1,0 +1,147 @@
+[
+  {
+    "tc_id": "TC-AUTH-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify successful login with valid credentials and secure password handling",
+    "preconditions": [
+      "User account (doctor/nurse) exists with a valid email and encrypted password.",
+      "System is accessible and the login page is displayed."
+    ],
+    "steps": [
+      "Enter a valid registered email address in the 'Email' field.",
+      "Enter the corresponding correct password in the 'Password' field.",
+      "Verify that the entered password is not visible in plain text (e.g., masked with asterisks or dots).",
+      "Click the 'Login' button."
+    ],
+    "expected": "The user is successfully authenticated and redirected to the application dashboard. The password field should prevent plain text display during entry and submission.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright",
+    "confidence": 1.0,
+    "compliance": [
+      "HIPAA V.A.1 (Permitted Uses and Disclosures of PHI - secure access for authorized users)",
+      "HIPAA VI.B (Technical security services - passwords)",
+      "FR-1.1",
+      "FR-1.2"
+    ]
+  },
+  {
+    "tc_id": "TC-VITALS-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify system rejects out-of-range Heart Rate entry and displays error message",
+    "preconditions": [
+      "Authorized user (doctor/nurse) is logged into MediTrack.",
+      "User is on the Patient Vitals Entry page for an existing patient."
+    ],
+    "steps": [
+      "Enter a valid Patient ID.",
+      "Attempt to enter a Heart Rate value outside the specified valid range (e.g., '25' bpm, which is less than 30 bpm).",
+      "Enter valid values for Blood Pressure and Temperature.",
+      "Click 'Save' or 'Submit'."
+    ],
+    "expected": "The system displays a clear error message indicating that the Heart Rate value is out of the valid range (30-200 bpm) and prevents saving the invalid entry to maintain data integrity.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright",
+    "confidence": 1.0,
+    "compliance": [
+      "HIPAA V.A.2 (Minimum Necessary Rule - ensuring data accuracy indirectly through validation)",
+      "HIPAA VI.A (Administrative procedures - data integrity practices)",
+      "FR-2.2"
+    ]
+  },
+  {
+    "tc_id": "TC-ALERT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify red warning icon and email alert for abnormal vitals without duplication",
+    "preconditions": [
+      "Authorized user (doctor/nurse) is logged into MediTrack.",
+      "User is on the Patient Vitals Entry page for an existing patient with an assigned doctor.",
+      "The assigned doctor's email is correctly configured and operational for notifications.",
+      "System is configured to recognize specific vital ranges as 'abnormal'."
+    ],
+    "steps": [
+      "Enter a Patient ID.",
+      "Enter an abnormal Heart Rate value (e.g., '250' bpm, which is greater than 200 bpm).",
+      "Enter other valid vital signs.",
+      "Click 'Save' or 'Submit'.",
+      "Navigate to the patient's vitals display page and observe the abnormal Heart Rate entry.",
+      "Check the assigned doctor's email inbox for an alert.",
+      "Attempt to save the *same* abnormal Heart Rate value again for the same patient within a short period."
+    ],
+    "expected": "A red warning icon is displayed next to the abnormal Heart Rate entry on the patient's vitals display. An email alert is sent *once* to the assigned doctor, notifying them of the abnormal vital sign for the patient. Subsequent attempts to enter the *same* abnormal value for the same entry should not trigger duplicate email alerts.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright with email testing capabilities",
+    "confidence": 0.9,
+    "compliance": [
+      "HIPAA V.A.1 (Permitted Uses/Disclosures for treatment - timely alerts for patient care)",
+      "HIPAA V.A.2 (Minimum Necessary Rule for disclosure in alerts)",
+      "HIPAA VI.B (Technical security services - secure email notifications for PHI)",
+      "FR-3.1",
+      "FR-3.2",
+      "FR-3.3"
+    ]
+  },
+  {
+    "tc_id": "TC-REPORT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify generation of patient health report in PDF format with accurate patient details and date filtering",
+    "preconditions": [
+      "Authorized user (doctor/nurse) is logged into MediTrack.",
+      "An existing patient has multiple vital entries recorded over a defined date range.",
+      "The system has functionality to generate reports."
+    ],
+    "steps": [
+      "Navigate to the Patient Reports section of the application.",
+      "Select an existing Patient ID for report generation.",
+      "Specify a custom date range (e.g., start date '2025-01-01', end date '2025-01-31') for the report.",
+      "Select the 'PDF' format option for the report output.",
+      "Click 'Generate Report' or equivalent button.",
+      "Download the generated report file.",
+      "Open the downloaded PDF report and verify its content."
+    ],
+    "expected": "A PDF report is successfully generated and downloaded. The report accurately includes the selected patient's details and all vital signs recorded within the specified date range. The report content is formatted correctly within the PDF, and sensitive patient information (PHI) is handled appropriately within the report.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright with PDF content validation library",
+    "confidence": 0.9,
+    "compliance": [
+      "HIPAA V.A.1 (Permitted Uses/Disclosures for health care operations - reporting)",
+      "HIPAA V.A.2 (Minimum Necessary Rule for disclosure in reports)",
+      "HIPAA NFR-2 (Encryption for data at rest and in transit implicitly for report storage/transfer)",
+      "FR-4.1",
+      "FR-4.2",
+      "FR-4.3"
+    ]
+  },
+  {
+    "tc_id": "TC-AUTH-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify account lockout mechanism after exceeding 5 failed login attempts",
+    "preconditions": [
+      "User account (doctor/nurse) exists with a valid email and password.",
+      "System's login security policy is set to lock out accounts after 5 failed attempts for 15 minutes."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid registered email address.",
+      "Enter an incorrect password.",
+      "Click 'Login'.",
+      "Repeat steps 2-4 five more times, totaling 6 failed login attempts.",
+      "After the 6th failed attempt, attempt to log in again with the *correct* password.",
+      "Wait for the specified lockout period (15 minutes) to expire.",
+      "After the lockout period, attempt to log in with the correct credentials."
+    ],
+    "expected": "After the 5th failed login attempt, the system locks the account. A clear message indicating account lockout and the duration (e.g., 'Your account has been locked for 15 minutes due to too many failed attempts') is displayed. Subsequent login attempts during the lockout period, even with correct credentials, are rejected. After 15 minutes, the user is able to log in successfully with the correct password.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright",
+    "confidence": 1.0,
+    "compliance": [
+      "HIPAA VI.A (Administrative procedures - security policies and safeguards)",
+      "HIPAA VI.B (Technical security services - authentication/access control)",
+      "FR-1.3"
+    ]
+  }
+]

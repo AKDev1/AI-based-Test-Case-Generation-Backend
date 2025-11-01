@@ -1,0 +1,24 @@
+{
+  "REQ-1760380033846": {
+    "id": "REQ-1760380033846",
+    "title": "MediTrack sample requirement",
+    "originalName": "MediTrack sample requirement.pdf",
+    "fileUri": "https://generativelanguage.googleapis.com/v1beta/files/ntjwg23ncdrk",
+    "uploadedAt": "2025-10-13T18:27:13.846Z",
+    "raw": {
+      "file": {
+        "name": "files/ntjwg23ncdrk",
+        "displayName": "MediTrack sample requirement.pdf",
+        "mimeType": "application/pdf",
+        "sizeBytes": "4037260",
+        "createTime": "2025-10-13T18:27:14.019685Z",
+        "updateTime": "2025-10-13T18:27:14.019685Z",
+        "expirationTime": "2025-10-15T18:27:12.962020100Z",
+        "sha256Hash": "OWUzNDQ2OGE0MWFkODFkYzc3NjVkMWYyNzUwZTE3NmFhZjhjNTY5ZTFiMGUyN2MxOTY4ZTY4M2EwYzY0OTc4Ng==",
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/ntjwg23ncdrk",
+        "state": "ACTIVE",
+        "source": "UPLOADED"
+      }
+    }
+  }
+}

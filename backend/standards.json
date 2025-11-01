@@ -1,0 +1,21 @@
+{
+  "hipaa.pdf": {
+    "fileUri": "https://generativelanguage.googleapis.com/v1beta/files/0i88f90b71fy",
+    "uploadedAt": "2025-10-13T18:27:07.599Z",
+    "raw": {
+      "file": {
+        "name": "files/0i88f90b71fy",
+        "displayName": "hipaa.pdf",
+        "mimeType": "application/pdf",
+        "sizeBytes": "1913432",
+        "createTime": "2025-10-13T18:27:07.855485Z",
+        "updateTime": "2025-10-13T18:27:07.855485Z",
+        "expirationTime": "2025-10-15T18:27:07.287307156Z",
+        "sha256Hash": "MmRhMTExMDYxYzAxZDA4M2Q5YjgwYWQ1MzkzZWE0Y2YxYzY0NTEyYmRmYzRiYWE2OWZiNDcwYTBkNzY5NjBjOQ==",
+        "uri": "https://generativelanguage.googleapis.com/v1beta/files/0i88f90b71fy",
+        "state": "ACTIVE",
+        "source": "UPLOADED"
+      }
+    }
+  }
+}

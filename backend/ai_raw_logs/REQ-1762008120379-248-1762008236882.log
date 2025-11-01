@@ -1,0 +1,190 @@
+--- RAW RESPONSE ---
+```json
+[
+  {
+    "tc_id": "TC-1762008120379-248-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify proper user authentication and role-based access control (RBAC)",
+    "preconditions": [
+      "MediTrack application is running and accessible.",
+      "Test user accounts with different roles (e.g., Admin, Doctor, Nurse, Patient) and associated permissions are configured in the system.",
+      "A test user with incorrect credentials (e.g., invalid username, wrong password) is available."
+    ],
+    "steps": [
+      "Attempt to log in to MediTrack with a valid Admin user's credentials.",
+      "Verify access to all administrative functions.",
+      "Log out.",
+      "Attempt to log in with a valid Doctor user's credentials.",
+      "Verify access to patient records and treatment plans, but restricted access to administrative functions.",
+      "Log out.",
+      "Attempt to log in with a valid Nurse user's credentials.",
+      "Verify access to patient charts and medication administration, but restricted access to treatment plans and administrative functions.",
+      "Log out.",
+      "Attempt to log in with an invalid username and/or password."
+    ],
+    "expected": "Only users with valid credentials can log in. Users are granted access only to functions and data appropriate for their assigned roles, and unauthorized access attempts are rejected with appropriate error messages.",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright, Cypress",
+    "confidence": 0.9,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-1762008120379-248-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify all sensitive data (PHI) is encrypted when transmitted over network",
+    "preconditions": [
+      "MediTrack application is running and accessible.",
+      "A network monitoring tool (e.g., Wireshark) is set up to capture network traffic from the client interacting with MediTrack.",
+      "A test user with access to view PHI."
+    ],
+    "steps": [
+      "Log in to MediTrack with a test user.",
+      "Navigate to a section displaying patient demographic information or medical records (PHI).",
+      "Perform actions that trigger data transmission (e.g., search for a patient, load a patient's full record, update a field).",
+      "Stop network traffic capture.",
+      "Examine the captured packets for any plaintext PHI being transmitted between the client and the server."
+    ],
+    "expected": "All data packets containing Protected Health Information (PHI) transmitted over the network between the client and MediTrack server are encrypted (e.g., using TLS/SSL) and are not readable in plaintext.",
+    "automatable": false,
+    "suggested_tool": "Wireshark",
+    "confidence": 0.9,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-1762008120379-248-003",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify comprehensive audit logging for all access and modification of Protected Health Information (PHI)",
+    "preconditions": [
+      "MediTrack application is running and accessible.",
+      "Audit logging mechanism is enabled and configured to capture PHI access events.",
+      "A test user has performed actions involving viewing/modifying PHI (e.g., opening a patient chart, updating a diagnosis).",
+      "An administrator or designated auditor account with access to audit logs."
+    ],
+    "steps": [
+      "Log in to MediTrack with the test user account.",
+      "Access and view a patient's medical history (PHI).",
+      "Modify a non-critical field in a patient record (PHI).",
+      "Log out.",
+      "Log in as an administrator/auditor.",
+      "Navigate to the system's audit log viewer or access the audit log data directly (e.g., via API or database).",
+      "Filter or search for entries related to the test user and the patient whose PHI was accessed/modified."
+    ],
+    "expected": "The audit logs contain detailed, immutable records for each instance of PHI access and modification, including the user's identity, timestamp, type of action performed (e.g., 'view', 'update'), and the specific PHI resource accessed/modified. Log entries are comprehensive and cannot be tampered with by unauthorized users.",
+    "automatable": true,
+    "suggested_tool": "Custom API Client, Database Query Tool, ELK Stack (for log analysis)",
+    "confidence": 0.9,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-1762008120379-248-004",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify data retention and secure deletion policies are enforced for PHI",
+    "preconditions": [
+      "MediTrack application is running.",
+      "Data retention and deletion policies for PHI are defined (e.g., retention for 7 years, then secure deletion).",
+      "Test patient data that has passed its retention period or is marked for deletion.",
+      "System includes a mechanism for data archival/deletion."
+    ],
+    "steps": [
+      "Identify a test patient record that is eligible for deletion or archiving based on defined policies.",
+      "Initiate the data deletion/archival process for this record (e.g., via administrative function).",
+      "Attempt to retrieve the deleted/archived record through normal application interfaces.",
+      "Verify that the data is no longer accessible via regular means.",
+      "(If applicable) Verify that the data is securely purged from storage, not just marked as deleted."
+    ],
+    "expected": "PHI records that are past their retention period or marked for deletion are securely removed from active systems and are inaccessible through normal application means. The deletion process adheres to defined secure deletion standards, preventing unauthorized recovery.",
+    "automatable": false,
+    "suggested_tool": "N/A",
+    "confidence": 0.8,
+    "compliance": ["hipaa"]
+  }
+]
+```
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "```json\n[\n  {\n    \"tc_id\": \"TC-1762008120379-248-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify proper user authentication and role-based access control (RBAC)\",\n    \"preconditions\": [\n      \"MediTrack application is running and accessible.\",\n      \"Test user accounts with different roles (e.g., Admin, Doctor, Nurse, Patient) and associated permissions are configured in the system.\",\n      \"A test user with incorrect credentials (e.g., invalid username, wrong password) is available.\"\n    ],\n    \"steps\": [\n      \"Attempt to log in to MediTrack with a valid Admin user's credentials.\",\n      \"Verify access to all administrative functions.\",\n      \"Log out.\",\n      \"Attempt to log in with a valid Doctor user's credentials.\",\n      \"Verify access to patient records and treatment plans, but restricted access to administrative functions.\",\n      \"Log out.\",\n      \"Attempt to log in with a valid Nurse user's credentials.\",\n      \"Verify access to patient charts and medication administration, but restricted access to treatment plans and administrative functions.\",\n      \"Log out.\",\n      \"Attempt to log in with an invalid username and/or password.\"\n    ],\n    \"expected\": \"Only users with valid credentials can log in. Users are granted access only to functions and data appropriate for their assigned roles, and unauthorized access attempts are rejected with appropriate error messages.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright, Cypress\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify all sensitive data (PHI) is encrypted when transmitted over network\",\n    \"preconditions\": [\n      \"MediTrack application is running and accessible.\",\n      \"A network monitoring tool (e.g., Wireshark) is set up to capture network traffic from the client interacting with MediTrack.\",\n      \"A test user with access to view PHI.\"\n    ],\n    \"steps\": [\n      \"Log in to MediTrack with a test user.\",\n      \"Navigate to a section displaying patient demographic information or medical records (PHI).\",\n      \"Perform actions that trigger data transmission (e.g., search for a patient, load a patient's full record, update a field).\",\n      \"Stop network traffic capture.\",\n      \"Examine the captured packets for any plaintext PHI being transmitted between the client and the server.\"\n    ],\n    \"expected\": \"All data packets containing Protected Health Information (PHI) transmitted over the network between the client and MediTrack server are encrypted (e.g., using TLS/SSL) and are not readable in plaintext.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Wireshark\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-003\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify comprehensive audit logging for all access and modification of Protected Health Information (PHI)\",\n    \"preconditions\": [\n      \"MediTrack application is running and accessible.\",\n      \"Audit logging mechanism is enabled and configured to capture PHI access events.\",\n      \"A test user has performed actions involving viewing/modifying PHI (e.g., opening a patient chart, updating a diagnosis).\",\n      \"An administrator or designated auditor account with access to audit logs.\"\n    ],\n    \"steps\": [\n      \"Log in to MediTrack with the test user account.\",\n      \"Access and view a patient's medical history (PHI).\",\n      \"Modify a non-critical field in a patient record (PHI).\",\n      \"Log out.\",\n      \"Log in as an administrator/auditor.\",\n      \"Navigate to the system's audit log viewer or access the audit log data directly (e.g., via API or database).\",\n      \"Filter or search for entries related to the test user and the patient whose PHI was accessed/modified.\"\n    ],\n    \"expected\": \"The audit logs contain detailed, immutable records for each instance of PHI access and modification, including the user's identity, timestamp, type of action performed (e.g., 'view', 'update'), and the specific PHI resource accessed/modified. Log entries are comprehensive and cannot be tampered with by unauthorized users.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Custom API Client, Database Query Tool, ELK Stack (for log analysis)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-004\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify data retention and secure deletion policies are enforced for PHI\",\n    \"preconditions\": [\n      \"MediTrack application is running.\",\n      \"Data retention and deletion policies for PHI are defined (e.g., retention for 7 years, then secure deletion).\",\n      \"Test patient data that has passed its retention period or is marked for deletion.\",\n      \"System includes a mechanism for data archival/deletion.\"\n    ],\n    \"steps\": [\n      \"Identify a test patient record that is eligible for deletion or archiving based on defined policies.\",\n      \"Initiate the data deletion/archival process for this record (e.g., via administrative function).\",\n      \"Attempt to retrieve the deleted/archived record through normal application interfaces.\",\n      \"Verify that the data is no longer accessible via regular means.\",\n      \"(If applicable) Verify that the data is securely purged from storage, not just marked as deleted.\"\n    ],\n    \"expected\": \"PHI records that are past their retention period or marked for deletion are securely removed from active systems and are inaccessible through normal application means. The deletion process adheres to defined secure deletion standards, preventing unauthorized recovery.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"N/A\",\n    \"confidence\": 0.8,\n    \"compliance\": [\"hipaa\"]\n  }\n]\n```"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 680,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 5905,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 182,
+    "outputTokens": 1551,
+    "thoughtsTokens": 5769,
+    "totalTokens": 7502
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "```json\n[\n  {\n    \"tc_id\": \"TC-1762008120379-248-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify proper user authentication and role-based access control (RBAC)\",\n    \"preconditions\": [\n      \"MediTrack application is running and accessible.\",\n      \"Test user accounts with different roles (e.g., Admin, Doctor, Nurse, Patient) and associated permissions are configured in the system.\",\n      \"A test user with incorrect credentials (e.g., invalid username, wrong password) is available.\"\n    ],\n    \"steps\": [\n      \"Attempt to log in to MediTrack with a valid Admin user's credentials.\",\n      \"Verify access to all administrative functions.\",\n      \"Log out.\",\n      \"Attempt to log in with a valid Doctor user's credentials.\",\n      \"Verify access to patient records and treatment plans, but restricted access to administrative functions.\",\n      \"Log out.\",\n      \"Attempt to log in with a valid Nurse user's credentials.\",\n      \"Verify access to patient charts and medication administration, but restricted access to treatment plans and administrative functions.\",\n      \"Log out.\",\n      \"Attempt to log in with an invalid username and/or password.\"\n    ],\n    \"expected\": \"Only users with valid credentials can log in. Users are granted access only to functions and data appropriate for their assigned roles, and unauthorized access attempts are rejected with appropriate error messages.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright, Cypress\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify all sensitive data (PHI) is encrypted when transmitted over network\",\n    \"preconditions\": [\n      \"MediTrack application is running and accessible.\",\n      \"A network monitoring tool (e.g., Wireshark) is set up to capture network traffic from the client interacting with MediTrack.\",\n      \"A test user with access to view PHI.\"\n    ],\n    \"steps\": [\n      \"Log in to MediTrack with a test user.\",\n      \"Navigate to a section displaying patient demographic information or medical records (PHI).\",\n      \"Perform actions that trigger data transmission (e.g., search for a patient, load a patient's full record, update a field).\",\n      \"Stop network traffic capture.\",\n      \"Examine the captured packets for any plaintext PHI being transmitted between the client and the server.\"\n    ],\n    \"expected\": \"All data packets containing Protected Health Information (PHI) transmitted over the network between the client and MediTrack server are encrypted (e.g., using TLS/SSL) and are not readable in plaintext.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Wireshark\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-003\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify comprehensive audit logging for all access and modification of Protected Health Information (PHI)\",\n    \"preconditions\": [\n      \"MediTrack application is running and accessible.\",\n      \"Audit logging mechanism is enabled and configured to capture PHI access events.\",\n      \"A test user has performed actions involving viewing/modifying PHI (e.g., opening a patient chart, updating a diagnosis).\",\n      \"An administrator or designated auditor account with access to audit logs.\"\n    ],\n    \"steps\": [\n      \"Log in to MediTrack with the test user account.\",\n      \"Access and view a patient's medical history (PHI).\",\n      \"Modify a non-critical field in a patient record (PHI).\",\n      \"Log out.\",\n      \"Log in as an administrator/auditor.\",\n      \"Navigate to the system's audit log viewer or access the audit log data directly (e.g., via API or database).\",\n      \"Filter or search for entries related to the test user and the patient whose PHI was accessed/modified.\"\n    ],\n    \"expected\": \"The audit logs contain detailed, immutable records for each instance of PHI access and modification, including the user's identity, timestamp, type of action performed (e.g., 'view', 'update'), and the specific PHI resource accessed/modified. Log entries are comprehensive and cannot be tampered with by unauthorized users.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Custom API Client, Database Query Tool, ELK Stack (for log analysis)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-1762008120379-248-004\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify data retention and secure deletion policies are enforced for PHI\",\n    \"preconditions\": [\n      \"MediTrack application is running.\",\n      \"Data retention and deletion policies for PHI are defined (e.g., retention for 7 years, then secure deletion).\",\n      \"Test patient data that has passed its retention period or is marked for deletion.\",\n      \"System includes a mechanism for data archival/deletion.\"\n    ],\n    \"steps\": [\n      \"Identify a test patient record that is eligible for deletion or archiving based on defined policies.\",\n      \"Initiate the data deletion/archival process for this record (e.g., via administrative function).\",\n      \"Attempt to retrieve the deleted/archived record through normal application interfaces.\",\n      \"Verify that the data is no longer accessible via regular means.\",\n      \"(If applicable) Verify that the data is securely purged from storage, not just marked as deleted.\"\n    ],\n    \"expected\": \"PHI records that are past their retention period or marked for deletion are securely removed from active systems and are inaccessible through normal application means. The deletion process adheres to defined secure deletion standards, preventing unauthorized recovery.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"N/A\",\n    \"confidence\": 0.8,\n    \"compliance\": [\"hipaa\"]\n  }\n]\n```"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 182,
+      "candidatesTokenCount": 1551,
+      "totalTokenCount": 7502,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 182
+        }
+      ],
+      "thoughtsTokenCount": 5769
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "rBwGaYLqHPS4juMPvemqiAg"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide 2-8 testcases. Use req_id provided."
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1762008120379-248\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

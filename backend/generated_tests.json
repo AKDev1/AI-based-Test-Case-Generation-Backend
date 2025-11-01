@@ -1,0 +1,119 @@
+[
+  {
+    "id": "gen-1760380095545-373",
+    "requirementId": "REQ-1760380033846",
+    "jiraId": "HELTH-48",
+    "requirementTitle": "MediTrack sample requirement",
+    "selectedStandards": [
+      "hipaa.pdf"
+    ],
+    "createdAt": "2025-10-13T18:28:15.545Z",
+    "testcases": [
+      {
+        "tc_id": "TC-REQ-1760380033846-001",
+        "req_id": "REQ-1760380033846",
+        "jira_id": "HELTH-49",
+        "title": "Verify secure user authentication for MediTrack",
+        "preconditions": [
+          "MediTrack application is accessible via a web browser or client.",
+          "Test user accounts with varying roles (e.g., Doctor, Nurse, Admin) are provisioned."
+        ],
+        "steps": [
+          "1. Navigate to the MediTrack application login page.",
+          "2. Enter valid credentials for a test user.",
+          "3. Attempt to login with invalid credentials (e.g., incorrect password, non-existent username).",
+          "4. Attempt to login with valid credentials after multiple failed attempts (if applicable, e.g., account lockout scenario)."
+        ],
+        "expected": "1. The system should successfully authenticate valid users and grant access based on their role. 2. Invalid login attempts should be rejected with an appropriate error message (e.g., 'Invalid credentials'). 3. The system should implement security measures such as account lockout or CAPTCHA after a configurable number of failed login attempts to prevent brute-force attacks.",
+        "automatable": true,
+        "suggested_tool": "Selenium WebDriver, Cypress, Playwright",
+        "confidence": 0.4,
+        "compliance": [
+          "hipaa"
+        ]
+      },
+      {
+        "tc_id": "TC-REQ-1760380033846-002",
+        "req_id": "REQ-1760380033846",
+        "jira_id": "",
+        "title": "Verify Role-Based Access Control (RBAC) restricts PHI access in MediTrack",
+        "preconditions": [
+          "MediTrack application is accessible.",
+          "Test user accounts with distinct roles (e.g., 'Doctor' with full patient access, 'Nurse' with limited patient access, 'Billing Clerk' with no clinical access) are provisioned.",
+          "Sample patient data (PHI) is available in the system."
+        ],
+        "steps": [
+          "1. Log in as a 'Nurse' user.",
+          "2. Attempt to access administrative settings or financial records.",
+          "3. Attempt to view or modify patient data that is outside the Nurse's defined scope (e.g., highly sensitive psychiatric notes if not authorized).",
+          "4. Log in as a 'Doctor' user.",
+          "5. Verify full access to clinical patient data.",
+          "6. Log in as a 'Billing Clerk' user.",
+          "7. Verify access to billing information but no clinical PHI."
+        ],
+        "expected": "1. The 'Nurse' user should be prevented from accessing administrative or financial records. 2. The 'Nurse' user should only be able to view/modify patient data within their defined scope. 3. The 'Doctor' user should have appropriate access to all clinical patient data. 4. The 'Billing Clerk' user should have access only to billing-related patient information and be restricted from clinical PHI.",
+        "automatable": true,
+        "suggested_tool": "Selenium WebDriver, Cypress, Playwright",
+        "confidence": 0.4,
+        "compliance": [
+          "hipaa"
+        ]
+      },
+      {
+        "tc_id": "TC-REQ-1760380033846-003",
+        "req_id": "REQ-1760380033846",
+        "jira_id": "",
+        "title": "Verify PHI is encrypted during transmission in MediTrack",
+        "preconditions": [
+          "MediTrack application is accessible.",
+          "Network monitoring tools (e.g., Wireshark) are available.",
+          "Test patient data (PHI) is present in the system."
+        ],
+        "steps": [
+          "1. Start a network packet capture.",
+          "2. Log into MediTrack application.",
+          "3. Perform actions that involve transmitting PHI (e.g., search for a patient, view patient details, update patient records).",
+          "4. Log out of the application.",
+          "5. Stop the network packet capture.",
+          "6. Analyze the captured network traffic for sensitive data during transmission."
+        ],
+        "expected": "All network communication involving Protected Health Information (PHI) between the client and MediTrack server should be encrypted using industry-standard protocols (e.g., TLS v1.2 or higher). No PHI should be visible in plain text in the network traffic.",
+        "automatable": false,
+        "suggested_tool": "Wireshark, tcpdump",
+        "confidence": 0.5,
+        "compliance": [
+          "hipaa"
+        ]
+      },
+      {
+        "tc_id": "TC-REQ-1760380033846-004",
+        "req_id": "REQ-1760380033846",
+        "jira_id": "",
+        "title": "Verify MediTrack maintains audit logs for PHI access",
+        "preconditions": [
+          "MediTrack application is accessible.",
+          "Access to MediTrack's backend audit logs or administrative reporting features.",
+          "Test user accounts are provisioned.",
+          "Sample patient data (PHI) is available."
+        ],
+        "steps": [
+          "1. Log in as a test user (e.g., 'Doctor').",
+          "2. Access and view a patient's medical record (PHI).",
+          "3. Log out.",
+          "4. Log in as a different test user (e.g., 'Nurse').",
+          "5. Attempt to modify a patient's prescription information.",
+          "6. Log out.",
+          "7. Access the MediTrack audit logs (via admin interface or directly from the backend).",
+          "8. Search for entries related to the actions performed in steps 2 and 5."
+        ],
+        "expected": "The audit logs should contain detailed records of user actions involving PHI, including: user ID, timestamp, type of action (e.g., 'view', 'update'), specific patient identifier, and outcome. Both successful views and modification attempts (successful or failed) should be logged.",
+        "automatable": false,
+        "suggested_tool": "Splunk, ELK Stack, Custom Log Viewer",
+        "confidence": 0.5,
+        "compliance": [
+          "hipaa"
+        ]
+      }
+    ]
+  }
+]

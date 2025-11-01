@@ -1,0 +1,194 @@
+--- RAW RESPONSE ---
+```json
+[
+  {
+    "tc_id": "TC-REQ-1760380033846-001",
+    "req_id": "REQ-1760380033846",
+    "jira_id": "",
+    "title": "Verify secure user authentication for MediTrack",
+    "preconditions": [
+      "MediTrack application is accessible via a web browser or client.",
+      "Test user accounts with varying roles (e.g., Doctor, Nurse, Admin) are provisioned."
+    ],
+    "steps": [
+      "1. Navigate to the MediTrack application login page.",
+      "2. Enter valid credentials for a test user.",
+      "3. Attempt to login with invalid credentials (e.g., incorrect password, non-existent username).",
+      "4. Attempt to login with valid credentials after multiple failed attempts (if applicable, e.g., account lockout scenario)."
+    ],
+    "expected": "1. The system should successfully authenticate valid users and grant access based on their role. 2. Invalid login attempts should be rejected with an appropriate error message (e.g., 'Invalid credentials'). 3. The system should implement security measures such as account lockout or CAPTCHA after a configurable number of failed login attempts to prevent brute-force attacks.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver, Cypress, Playwright",
+    "confidence": 0.4,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1760380033846-002",
+    "req_id": "REQ-1760380033846",
+    "jira_id": "",
+    "title": "Verify Role-Based Access Control (RBAC) restricts PHI access in MediTrack",
+    "preconditions": [
+      "MediTrack application is accessible.",
+      "Test user accounts with distinct roles (e.g., 'Doctor' with full patient access, 'Nurse' with limited patient access, 'Billing Clerk' with no clinical access) are provisioned.",
+      "Sample patient data (PHI) is available in the system."
+    ],
+    "steps": [
+      "1. Log in as a 'Nurse' user.",
+      "2. Attempt to access administrative settings or financial records.",
+      "3. Attempt to view or modify patient data that is outside the Nurse's defined scope (e.g., highly sensitive psychiatric notes if not authorized).",
+      "4. Log in as a 'Doctor' user.",
+      "5. Verify full access to clinical patient data.",
+      "6. Log in as a 'Billing Clerk' user.",
+      "7. Verify access to billing information but no clinical PHI."
+    ],
+    "expected": "1. The 'Nurse' user should be prevented from accessing administrative or financial records. 2. The 'Nurse' user should only be able to view/modify patient data within their defined scope. 3. The 'Doctor' user should have appropriate access to all clinical patient data. 4. The 'Billing Clerk' user should have access only to billing-related patient information and be restricted from clinical PHI.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver, Cypress, Playwright",
+    "confidence": 0.4,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1760380033846-003",
+    "req_id": "REQ-1760380033846",
+    "jira_id": "",
+    "title": "Verify PHI is encrypted during transmission in MediTrack",
+    "preconditions": [
+      "MediTrack application is accessible.",
+      "Network monitoring tools (e.g., Wireshark) are available.",
+      "Test patient data (PHI) is present in the system."
+    ],
+    "steps": [
+      "1. Start a network packet capture.",
+      "2. Log into MediTrack application.",
+      "3. Perform actions that involve transmitting PHI (e.g., search for a patient, view patient details, update patient records).",
+      "4. Log out of the application.",
+      "5. Stop the network packet capture.",
+      "6. Analyze the captured network traffic for sensitive data during transmission."
+    ],
+    "expected": "All network communication involving Protected Health Information (PHI) between the client and MediTrack server should be encrypted using industry-standard protocols (e.g., TLS v1.2 or higher). No PHI should be visible in plain text in the network traffic.",
+    "automatable": false,
+    "suggested_tool": "Wireshark, tcpdump",
+    "confidence": 0.5,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1760380033846-004",
+    "req_id": "REQ-1760380033846",
+    "jira_id": "",
+    "title": "Verify MediTrack maintains audit logs for PHI access",
+    "preconditions": [
+      "MediTrack application is accessible.",
+      "Access to MediTrack's backend audit logs or administrative reporting features.",
+      "Test user accounts are provisioned.",
+      "Sample patient data (PHI) is available."
+    ],
+    "steps": [
+      "1. Log in as a test user (e.g., 'Doctor').",
+      "2. Access and view a patient's medical record (PHI).",
+      "3. Log out.",
+      "4. Log in as a different test user (e.g., 'Nurse').",
+      "5. Attempt to modify a patient's prescription information.",
+      "6. Log out.",
+      "7. Access the MediTrack audit logs (via admin interface or directly from the backend).",
+      "8. Search for entries related to the actions performed in steps 2 and 5."
+    ],
+    "expected": "The audit logs should contain detailed records of user actions involving PHI, including: user ID, timestamp, type of action (e.g., 'view', 'update'), specific patient identifier, and outcome. Both successful views and modification attempts (successful or failed) should be logged.",
+    "automatable": false,
+    "suggested_tool": "Splunk, ELK Stack, Custom Log Viewer",
+    "confidence": 0.5,
+    "compliance": [
+      "hipaa"
+    ]
+  }
+]
+```
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "```json\n[\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-001\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify secure user authentication for MediTrack\",\n    \"preconditions\": [\n      \"MediTrack application is accessible via a web browser or client.\",\n      \"Test user accounts with varying roles (e.g., Doctor, Nurse, Admin) are provisioned.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack application login page.\",\n      \"2. Enter valid credentials for a test user.\",\n      \"3. Attempt to login with invalid credentials (e.g., incorrect password, non-existent username).\",\n      \"4. Attempt to login with valid credentials after multiple failed attempts (if applicable, e.g., account lockout scenario).\"\n    ],\n    \"expected\": \"1. The system should successfully authenticate valid users and grant access based on their role. 2. Invalid login attempts should be rejected with an appropriate error message (e.g., 'Invalid credentials'). 3. The system should implement security measures such as account lockout or CAPTCHA after a configurable number of failed login attempts to prevent brute-force attacks.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver, Cypress, Playwright\",\n    \"confidence\": 0.4,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-002\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Role-Based Access Control (RBAC) restricts PHI access in MediTrack\",\n    \"preconditions\": [\n      \"MediTrack application is accessible.\",\n      \"Test user accounts with distinct roles (e.g., 'Doctor' with full patient access, 'Nurse' with limited patient access, 'Billing Clerk' with no clinical access) are provisioned.\",\n      \"Sample patient data (PHI) is available in the system.\"\n    ],\n    \"steps\": [\n      \"1. Log in as a 'Nurse' user.\",\n      \"2. Attempt to access administrative settings or financial records.\",\n      \"3. Attempt to view or modify patient data that is outside the Nurse's defined scope (e.g., highly sensitive psychiatric notes if not authorized).\",\n      \"4. Log in as a 'Doctor' user.\",\n      \"5. Verify full access to clinical patient data.\",\n      \"6. Log in as a 'Billing Clerk' user.\",\n      \"7. Verify access to billing information but no clinical PHI.\"\n    ],\n    \"expected\": \"1. The 'Nurse' user should be prevented from accessing administrative or financial records. 2. The 'Nurse' user should only be able to view/modify patient data within their defined scope. 3. The 'Doctor' user should have appropriate access to all clinical patient data. 4. The 'Billing Clerk' user should have access only to billing-related patient information and be restricted from clinical PHI.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver, Cypress, Playwright\",\n    \"confidence\": 0.4,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-003\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify PHI is encrypted during transmission in MediTrack\",\n    \"preconditions\": [\n      \"MediTrack application is accessible.\",\n      \"Network monitoring tools (e.g., Wireshark) are available.\",\n      \"Test patient data (PHI) is present in the system.\"\n    ],\n    \"steps\": [\n      \"1. Start a network packet capture.\",\n      \"2. Log into MediTrack application.\",\n      \"3. Perform actions that involve transmitting PHI (e.g., search for a patient, view patient details, update patient records).\",\n      \"4. Log out of the application.\",\n      \"5. Stop the network packet capture.\",\n      \"6. Analyze the captured network traffic for sensitive data during transmission.\"\n    ],\n    \"expected\": \"All network communication involving Protected Health Information (PHI) between the client and MediTrack server should be encrypted using industry-standard protocols (e.g., TLS v1.2 or higher). No PHI should be visible in plain text in the network traffic.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Wireshark, tcpdump\",\n    \"confidence\": 0.5,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-004\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify MediTrack maintains audit logs for PHI access\",\n    \"preconditions\": [\n      \"MediTrack application is accessible.\",\n      \"Access to MediTrack's backend audit logs or administrative reporting features.\",\n      \"Test user accounts are provisioned.\",\n      \"Sample patient data (PHI) is available.\"\n    ],\n    \"steps\": [\n      \"1. Log in as a test user (e.g., 'Doctor').\",\n      \"2. Access and view a patient's medical record (PHI).\",\n      \"3. Log out.\",\n      \"4. Log in as a different test user (e.g., 'Nurse').\",\n      \"5. Attempt to modify a patient's prescription information.\",\n      \"6. Log out.\",\n      \"7. Access the MediTrack audit logs (via admin interface or directly from the backend).\",\n      \"8. Search for entries related to the actions performed in steps 2 and 5.\"\n    ],\n    \"expected\": \"The audit logs should contain detailed records of user actions involving PHI, including: user ID, timestamp, type of action (e.g., 'view', 'update'), specific patient identifier, and outcome. Both successful views and modification attempts (successful or failed) should be logged.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Splunk, ELK Stack, Custom Log Viewer\",\n    \"confidence\": 0.5,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]\n```"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 676,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 5456,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 178,
+    "outputTokens": 1540,
+    "thoughtsTokens": 4921,
+    "totalTokens": 6639
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "```json\n[\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-001\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify secure user authentication for MediTrack\",\n    \"preconditions\": [\n      \"MediTrack application is accessible via a web browser or client.\",\n      \"Test user accounts with varying roles (e.g., Doctor, Nurse, Admin) are provisioned.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack application login page.\",\n      \"2. Enter valid credentials for a test user.\",\n      \"3. Attempt to login with invalid credentials (e.g., incorrect password, non-existent username).\",\n      \"4. Attempt to login with valid credentials after multiple failed attempts (if applicable, e.g., account lockout scenario).\"\n    ],\n    \"expected\": \"1. The system should successfully authenticate valid users and grant access based on their role. 2. Invalid login attempts should be rejected with an appropriate error message (e.g., 'Invalid credentials'). 3. The system should implement security measures such as account lockout or CAPTCHA after a configurable number of failed login attempts to prevent brute-force attacks.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver, Cypress, Playwright\",\n    \"confidence\": 0.4,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-002\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify Role-Based Access Control (RBAC) restricts PHI access in MediTrack\",\n    \"preconditions\": [\n      \"MediTrack application is accessible.\",\n      \"Test user accounts with distinct roles (e.g., 'Doctor' with full patient access, 'Nurse' with limited patient access, 'Billing Clerk' with no clinical access) are provisioned.\",\n      \"Sample patient data (PHI) is available in the system.\"\n    ],\n    \"steps\": [\n      \"1. Log in as a 'Nurse' user.\",\n      \"2. Attempt to access administrative settings or financial records.\",\n      \"3. Attempt to view or modify patient data that is outside the Nurse's defined scope (e.g., highly sensitive psychiatric notes if not authorized).\",\n      \"4. Log in as a 'Doctor' user.\",\n      \"5. Verify full access to clinical patient data.\",\n      \"6. Log in as a 'Billing Clerk' user.\",\n      \"7. Verify access to billing information but no clinical PHI.\"\n    ],\n    \"expected\": \"1. The 'Nurse' user should be prevented from accessing administrative or financial records. 2. The 'Nurse' user should only be able to view/modify patient data within their defined scope. 3. The 'Doctor' user should have appropriate access to all clinical patient data. 4. The 'Billing Clerk' user should have access only to billing-related patient information and be restricted from clinical PHI.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver, Cypress, Playwright\",\n    \"confidence\": 0.4,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-003\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify PHI is encrypted during transmission in MediTrack\",\n    \"preconditions\": [\n      \"MediTrack application is accessible.\",\n      \"Network monitoring tools (e.g., Wireshark) are available.\",\n      \"Test patient data (PHI) is present in the system.\"\n    ],\n    \"steps\": [\n      \"1. Start a network packet capture.\",\n      \"2. Log into MediTrack application.\",\n      \"3. Perform actions that involve transmitting PHI (e.g., search for a patient, view patient details, update patient records).\",\n      \"4. Log out of the application.\",\n      \"5. Stop the network packet capture.\",\n      \"6. Analyze the captured network traffic for sensitive data during transmission.\"\n    ],\n    \"expected\": \"All network communication involving Protected Health Information (PHI) between the client and MediTrack server should be encrypted using industry-standard protocols (e.g., TLS v1.2 or higher). No PHI should be visible in plain text in the network traffic.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Wireshark, tcpdump\",\n    \"confidence\": 0.5,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1760380033846-004\",\n    \"req_id\": \"REQ-1760380033846\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify MediTrack maintains audit logs for PHI access\",\n    \"preconditions\": [\n      \"MediTrack application is accessible.\",\n      \"Access to MediTrack's backend audit logs or administrative reporting features.\",\n      \"Test user accounts are provisioned.\",\n      \"Sample patient data (PHI) is available.\"\n    ],\n    \"steps\": [\n      \"1. Log in as a test user (e.g., 'Doctor').\",\n      \"2. Access and view a patient's medical record (PHI).\",\n      \"3. Log out.\",\n      \"4. Log in as a different test user (e.g., 'Nurse').\",\n      \"5. Attempt to modify a patient's prescription information.\",\n      \"6. Log out.\",\n      \"7. Access the MediTrack audit logs (via admin interface or directly from the backend).\",\n      \"8. Search for entries related to the actions performed in steps 2 and 5.\"\n    ],\n    \"expected\": \"The audit logs should contain detailed records of user actions involving PHI, including: user ID, timestamp, type of action (e.g., 'view', 'update'), specific patient identifier, and outcome. Both successful views and modification attempts (successful or failed) should be logged.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Splunk, ELK Stack, Custom Log Viewer\",\n    \"confidence\": 0.5,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]\n```"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 178,
+      "candidatesTokenCount": 1540,
+      "totalTokenCount": 6639,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 178
+        }
+      ],
+      "thoughtsTokenCount": 4921
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "v0TtaJupJ6yzvr0P_5Oo0AE"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide 2-8 testcases. Use req_id provided."
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1760380033846\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

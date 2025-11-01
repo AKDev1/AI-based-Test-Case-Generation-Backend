@@ -1,0 +1,225 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TC-AUTH-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify successful user login with valid email and encrypted password.",
+    "preconditions": [
+      "A registered user account (Doctor or Nurse) with valid email and encrypted password exists in the system.",
+      "The user's account is not locked.",
+      "The MediTrack web application is accessible."
+    ],
+    "steps": [
+      "1. Navigate to the MediTrack login page.",
+      "2. Enter a valid email address in the 'Email' field.",
+      "3. Enter the corresponding valid password in the 'Password' field (ensure it's not visible in plain text).",
+      "4. Click the 'Login' button."
+    ],
+    "expected": "The user is successfully logged in and redirected to their dashboard or home page, demonstrating that login works with valid credentials (FR-1.1, AC-Login). The password entered should not be visible in plain text (FR-1.2), aligning with HIPAA security requirements for protecting PHI access (Page 55, M.3.a,b,c; Page 60, VI.B.B).",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-AUTH-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify user account locks after more than 5 failed login attempts for 15 minutes.",
+    "preconditions": [
+      "A registered user account (Doctor or Nurse) with a known valid email exists.",
+      "The user's account is not currently locked.",
+      "The MediTrack web application is accessible."
+    ],
+    "steps": [
+      "1. Navigate to the MediTrack login page.",
+      "2. Enter the valid email address for a test user.",
+      "3. Enter an incorrect password in the 'Password' field.",
+      "4. Click 'Login'.",
+      "5. Repeat steps 3-4 five more times (total of 6 failed attempts).",
+      "6. After the 6th attempt, attempt to log in with the correct password.",
+      "7. Wait for 15 minutes and then attempt to log in with the correct password."
+    ],
+    "expected": "After 6 failed login attempts (more than 5), an error message is displayed indicating the account is locked (FR-1.3, AC-Login). Subsequent attempts to log in within the 15-minute lock period, even with correct credentials, should fail with an 'account locked' message. After 15 minutes, the user should be able to log in successfully with the correct credentials. This aligns with HIPAA's security requirements for protecting PHI from unauthorized access (Page 55, M.3.a,b,c; Page 60, VI.B.B).",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-VITALS-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify authorized users can enter and save valid patient vital signs with timestamp and patient ID.",
+    "preconditions": [
+      "A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.",
+      "An existing patient record with a valid Patient ID.",
+      "The MediTrack application is accessible."
+    ],
+    "steps": [
+      "1. Navigate to the 'Patient Vitals Entry' section.",
+      "2. Select an existing Patient ID.",
+      "3. Enter a Heart Rate value within the valid range (e.g., 100 bpm, between 30-200 bpm).",
+      "4. Enter a Blood Pressure value (e.g., 120/80 mmHg).",
+      "5. Enter a Temperature value within the valid range (e.g., 98.6 °F, between 95-107 °F).",
+      "6. Click the 'Save' button.",
+      "7. Verify the entered vitals appear in the patient's record."
+    ],
+    "expected": "The system accepts and saves the vital signs successfully (FR-2.1, FR-2.2, FR-2.3, AC-Vitals). The entered vitals are displayed in the patient's record with a system-generated timestamp and the correct Patient ID. No validation error messages are displayed. This demonstrates proper handling and storage of Protected Health Information (PHI) as defined by HIPAA (Page 12, PHI definition; Page 55, M.3.a,b,c).",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-VITALS-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify system validates patient vital signs against defined ranges and displays error messages for invalid inputs.",
+    "preconditions": [
+      "A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.",
+      "An existing patient record with a valid Patient ID.",
+      "The MediTrack application is accessible."
+    ],
+    "steps": [
+      "1. Navigate to the 'Patient Vitals Entry' section.",
+      "2. Select an existing Patient ID.",
+      "3. Enter an invalid Heart Rate value (e.g., 20 bpm, outside 30-200 bpm).",
+      "4. Enter an invalid Temperature value (e.g., 110 °F, outside 95-107 °F).",
+      "5. Enter a valid Blood Pressure value (e.g., 120/80 mmHg).",
+      "6. Click the 'Save' button."
+    ],
+    "expected": "The system displays clear error messages indicating that the Heart Rate and Temperature values are outside the valid ranges (FR-2.2, AC-Vitals). The invalid vital signs are NOT saved to the patient's record. The system prevents saving the entry until all inputs are within valid ranges or corrected. This ensures the integrity of PHI, which is a key aspect of HIPAA compliance (Page 12, PHI definition; Page 55, M.3.a,b,c).",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC-ALERT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify an email alert is sent once for each abnormal vital entry to the assigned doctor.",
+    "preconditions": [
+      "A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.",
+      "An existing patient record with a doctor assigned and a valid email address for the doctor.",
+      "The email notification system is configured and operational.",
+      "The MediTrack application is accessible."
+    ],
+    "steps": [
+      "1. Navigate to the 'Patient Vitals Entry' section.",
+      "2. Select an existing Patient ID with an assigned doctor.",
+      "3. Enter an abnormal Heart Rate value (e.g., 210 bpm, outside 30-200 bpm).",
+      "4. Enter normal values for other vitals (Blood Pressure, Temperature).",
+      "5. Click the 'Save' button.",
+      "6. Immediately repeat steps 3-5 for the same patient with the same abnormal Heart Rate value.",
+      "7. Verify the assigned doctor's email inbox."
+    ],
+    "expected": "A red warning icon is displayed next to the abnormal Heart Rate vital in the patient's record (FR-3.1). The assigned doctor receives only ONE email alert for the initial abnormal Heart Rate entry (FR-3.2, FR-3.3, AC-Alerts). No duplicate email alerts are sent for the subsequent entry of the same abnormal vital for the same patient, adhering to the 'only once per abnormal entry (no duplicates)' rule. The email content should securely identify the patient and the abnormal vital, demonstrating adherence to HIPAA's 'minimum necessary' rule and secure data transmission (NFR-2; Page 13, V.A.2; Page 36, G.2; Page 60, VI.B.B; Page 12, PHI definition).",
+    "automatable": true,
+    "suggested_tool": "Selenium, Playwright (for UI interaction); Mailosaur, GreenMail (for email verification)",
+    "confidence": 0.9,
+    "compliance": ["hipaa"]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid email and encrypted password.\",\n    \"preconditions\": [\n      \"A registered user account (Doctor or Nurse) with valid email and encrypted password exists in the system.\",\n      \"The user's account is not locked.\",\n      \"The MediTrack web application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack login page.\",\n      \"2. Enter a valid email address in the 'Email' field.\",\n      \"3. Enter the corresponding valid password in the 'Password' field (ensure it's not visible in plain text).\",\n      \"4. Click the 'Login' button.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to their dashboard or home page, demonstrating that login works with valid credentials (FR-1.1, AC-Login). The password entered should not be visible in plain text (FR-1.2), aligning with HIPAA security requirements for protecting PHI access (Page 55, M.3.a,b,c; Page 60, VI.B.B).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify user account locks after more than 5 failed login attempts for 15 minutes.\",\n    \"preconditions\": [\n      \"A registered user account (Doctor or Nurse) with a known valid email exists.\",\n      \"The user's account is not currently locked.\",\n      \"The MediTrack web application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack login page.\",\n      \"2. Enter the valid email address for a test user.\",\n      \"3. Enter an incorrect password in the 'Password' field.\",\n      \"4. Click 'Login'.\",\n      \"5. Repeat steps 3-4 five more times (total of 6 failed attempts).\",\n      \"6. After the 6th attempt, attempt to log in with the correct password.\",\n      \"7. Wait for 15 minutes and then attempt to log in with the correct password.\"\n    ],\n    \"expected\": \"After 6 failed login attempts (more than 5), an error message is displayed indicating the account is locked (FR-1.3, AC-Login). Subsequent attempts to log in within the 15-minute lock period, even with correct credentials, should fail with an 'account locked' message. After 15 minutes, the user should be able to log in successfully with the correct credentials. This aligns with HIPAA's security requirements for protecting PHI from unauthorized access (Page 55, M.3.a,b,c; Page 60, VI.B.B).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify authorized users can enter and save valid patient vital signs with timestamp and patient ID.\",\n    \"preconditions\": [\n      \"A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.\",\n      \"An existing patient record with a valid Patient ID.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the 'Patient Vitals Entry' section.\",\n      \"2. Select an existing Patient ID.\",\n      \"3. Enter a Heart Rate value within the valid range (e.g., 100 bpm, between 30-200 bpm).\",\n      \"4. Enter a Blood Pressure value (e.g., 120/80 mmHg).\",\n      \"5. Enter a Temperature value within the valid range (e.g., 98.6 °F, between 95-107 °F).\",\n      \"6. Click the 'Save' button.\",\n      \"7. Verify the entered vitals appear in the patient's record.\"\n    ],\n    \"expected\": \"The system accepts and saves the vital signs successfully (FR-2.1, FR-2.2, FR-2.3, AC-Vitals). The entered vitals are displayed in the patient's record with a system-generated timestamp and the correct Patient ID. No validation error messages are displayed. This demonstrates proper handling and storage of Protected Health Information (PHI) as defined by HIPAA (Page 12, PHI definition; Page 55, M.3.a,b,c).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify system validates patient vital signs against defined ranges and displays error messages for invalid inputs.\",\n    \"preconditions\": [\n      \"A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.\",\n      \"An existing patient record with a valid Patient ID.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the 'Patient Vitals Entry' section.\",\n      \"2. Select an existing Patient ID.\",\n      \"3. Enter an invalid Heart Rate value (e.g., 20 bpm, outside 30-200 bpm).\",\n      \"4. Enter an invalid Temperature value (e.g., 110 °F, outside 95-107 °F).\",\n      \"5. Enter a valid Blood Pressure value (e.g., 120/80 mmHg).\",\n      \"6. Click the 'Save' button.\"\n    ],\n    \"expected\": \"The system displays clear error messages indicating that the Heart Rate and Temperature values are outside the valid ranges (FR-2.2, AC-Vitals). The invalid vital signs are NOT saved to the patient's record. The system prevents saving the entry until all inputs are within valid ranges or corrected. This ensures the integrity of PHI, which is a key aspect of HIPAA compliance (Page 12, PHI definition; Page 55, M.3.a,b,c).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-ALERT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify an email alert is sent once for each abnormal vital entry to the assigned doctor.\",\n    \"preconditions\": [\n      \"A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.\",\n      \"An existing patient record with a doctor assigned and a valid email address for the doctor.\",\n      \"The email notification system is configured and operational.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the 'Patient Vitals Entry' section.\",\n      \"2. Select an existing Patient ID with an assigned doctor.\",\n      \"3. Enter an abnormal Heart Rate value (e.g., 210 bpm, outside 30-200 bpm).\",\n      \"4. Enter normal values for other vitals (Blood Pressure, Temperature).\",\n      \"5. Click the 'Save' button.\",\n      \"6. Immediately repeat steps 3-5 for the same patient with the same abnormal Heart Rate value.\",\n      \"7. Verify the assigned doctor's email inbox.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal Heart Rate vital in the patient's record (FR-3.1). The assigned doctor receives only ONE email alert for the initial abnormal Heart Rate entry (FR-3.2, FR-3.3, AC-Alerts). No duplicate email alerts are sent for the subsequent entry of the same abnormal vital for the same patient, adhering to the 'only once per abnormal entry (no duplicates)' rule. The email content should securely identify the patient and the abnormal vital, demonstrating adherence to HIPAA's 'minimum necessary' rule and secure data transmission (NFR-2; Page 13, V.A.2; Page 36, G.2; Page 60, VI.B.B; Page 12, PHI definition).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright (for UI interaction); Mailosaur, GreenMail (for email verification)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 894,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 7521,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 16497,
+    "outputTokens": 2195,
+    "thoughtsTokens": 3837,
+    "totalTokens": 22529
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TC-AUTH-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid email and encrypted password.\",\n    \"preconditions\": [\n      \"A registered user account (Doctor or Nurse) with valid email and encrypted password exists in the system.\",\n      \"The user's account is not locked.\",\n      \"The MediTrack web application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack login page.\",\n      \"2. Enter a valid email address in the 'Email' field.\",\n      \"3. Enter the corresponding valid password in the 'Password' field (ensure it's not visible in plain text).\",\n      \"4. Click the 'Login' button.\"\n    ],\n    \"expected\": \"The user is successfully logged in and redirected to their dashboard or home page, demonstrating that login works with valid credentials (FR-1.1, AC-Login). The password entered should not be visible in plain text (FR-1.2), aligning with HIPAA security requirements for protecting PHI access (Page 55, M.3.a,b,c; Page 60, VI.B.B).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-AUTH-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify user account locks after more than 5 failed login attempts for 15 minutes.\",\n    \"preconditions\": [\n      \"A registered user account (Doctor or Nurse) with a known valid email exists.\",\n      \"The user's account is not currently locked.\",\n      \"The MediTrack web application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the MediTrack login page.\",\n      \"2. Enter the valid email address for a test user.\",\n      \"3. Enter an incorrect password in the 'Password' field.\",\n      \"4. Click 'Login'.\",\n      \"5. Repeat steps 3-4 five more times (total of 6 failed attempts).\",\n      \"6. After the 6th attempt, attempt to log in with the correct password.\",\n      \"7. Wait for 15 minutes and then attempt to log in with the correct password.\"\n    ],\n    \"expected\": \"After 6 failed login attempts (more than 5), an error message is displayed indicating the account is locked (FR-1.3, AC-Login). Subsequent attempts to log in within the 15-minute lock period, even with correct credentials, should fail with an 'account locked' message. After 15 minutes, the user should be able to log in successfully with the correct credentials. This aligns with HIPAA's security requirements for protecting PHI from unauthorized access (Page 55, M.3.a,b,c; Page 60, VI.B.B).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify authorized users can enter and save valid patient vital signs with timestamp and patient ID.\",\n    \"preconditions\": [\n      \"A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.\",\n      \"An existing patient record with a valid Patient ID.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the 'Patient Vitals Entry' section.\",\n      \"2. Select an existing Patient ID.\",\n      \"3. Enter a Heart Rate value within the valid range (e.g., 100 bpm, between 30-200 bpm).\",\n      \"4. Enter a Blood Pressure value (e.g., 120/80 mmHg).\",\n      \"5. Enter a Temperature value within the valid range (e.g., 98.6 °F, between 95-107 °F).\",\n      \"6. Click the 'Save' button.\",\n      \"7. Verify the entered vitals appear in the patient's record.\"\n    ],\n    \"expected\": \"The system accepts and saves the vital signs successfully (FR-2.1, FR-2.2, FR-2.3, AC-Vitals). The entered vitals are displayed in the patient's record with a system-generated timestamp and the correct Patient ID. No validation error messages are displayed. This demonstrates proper handling and storage of Protected Health Information (PHI) as defined by HIPAA (Page 12, PHI definition; Page 55, M.3.a,b,c).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-VITALS-002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify system validates patient vital signs against defined ranges and displays error messages for invalid inputs.\",\n    \"preconditions\": [\n      \"A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.\",\n      \"An existing patient record with a valid Patient ID.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the 'Patient Vitals Entry' section.\",\n      \"2. Select an existing Patient ID.\",\n      \"3. Enter an invalid Heart Rate value (e.g., 20 bpm, outside 30-200 bpm).\",\n      \"4. Enter an invalid Temperature value (e.g., 110 °F, outside 95-107 °F).\",\n      \"5. Enter a valid Blood Pressure value (e.g., 120/80 mmHg).\",\n      \"6. Click the 'Save' button.\"\n    ],\n    \"expected\": \"The system displays clear error messages indicating that the Heart Rate and Temperature values are outside the valid ranges (FR-2.2, AC-Vitals). The invalid vital signs are NOT saved to the patient's record. The system prevents saving the entry until all inputs are within valid ranges or corrected. This ensures the integrity of PHI, which is a key aspect of HIPAA compliance (Page 12, PHI definition; Page 55, M.3.a,b,c).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC-ALERT-001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify an email alert is sent once for each abnormal vital entry to the assigned doctor.\",\n    \"preconditions\": [\n      \"A logged-in authorized user (Doctor or Nurse) with permissions to enter patient vitals.\",\n      \"An existing patient record with a doctor assigned and a valid email address for the doctor.\",\n      \"The email notification system is configured and operational.\",\n      \"The MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"1. Navigate to the 'Patient Vitals Entry' section.\",\n      \"2. Select an existing Patient ID with an assigned doctor.\",\n      \"3. Enter an abnormal Heart Rate value (e.g., 210 bpm, outside 30-200 bpm).\",\n      \"4. Enter normal values for other vitals (Blood Pressure, Temperature).\",\n      \"5. Click the 'Save' button.\",\n      \"6. Immediately repeat steps 3-5 for the same patient with the same abnormal Heart Rate value.\",\n      \"7. Verify the assigned doctor's email inbox.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal Heart Rate vital in the patient's record (FR-3.1). The assigned doctor receives only ONE email alert for the initial abnormal Heart Rate entry (FR-3.2, FR-3.3, AC-Alerts). No duplicate email alerts are sent for the subsequent entry of the same abnormal vital for the same patient, adhering to the 'only once per abnormal entry (no duplicates)' rule. The email content should securely identify the patient and the abnormal vital, demonstrating adherence to HIPAA's 'minimum necessary' rule and secure data transmission (NFR-2; Page 13, V.A.2; Page 36, G.2; Page 60, VI.B.B; Page 12, PHI definition).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium, Playwright (for UI interaction); Mailosaur, GreenMail (for email verification)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 16497,
+      "candidatesTokenCount": 2195,
+      "totalTokenCount": 22529,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 243
+        },
+        {
+          "modality": "DOCUMENT",
+          "tokenCount": 16254
+        }
+      ],
+      "thoughtsTokenCount": 3837
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "pGoGabKBNL7C4-EPyIyK-Ak"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide minimum 2 testcases. Decide the max number of testcases based on the size of the requirements. You are free to produce as many testcases as required. Use req_id: REQ-1762008120379-248.\n\nAdditional user instructions:\nGenerate 5 testcases instead of 4"
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1762008120379-248\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/kk8kj49bdjuc"
+            }
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/1ctqa4ucb92e"
+            }
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

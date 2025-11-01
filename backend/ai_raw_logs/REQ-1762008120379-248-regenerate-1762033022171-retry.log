@@ -1,0 +1,149 @@
+```json
+[
+  {
+    "tc_id": "TC-AUTH-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Password Encryption and Account Lockout Mechanism",
+    "preconditions": [
+      "A doctor or nurse account exists in MediTrack.",
+      "The user is on the login page."
+    ],
+    "steps": [
+      "Enter a valid email address for an existing user.",
+      "Enter an incorrect password 5 times consecutively.",
+      "Observe the behavior of the password input field during entry (e.g., masking characters).",
+      "Inspect network traffic during login attempts to ensure passwords are not transmitted in plain text.",
+      "On the 6th failed login attempt, enter an incorrect password.",
+      "Attempt to log in with the correct password after the 6th failed attempt."
+    ],
+    "expected": "The password input field should mask characters (e.g., *****). Passwords must be encrypted during transmission (e.g., HTTPS/TLS 1.2+). After 5 failed login attempts, the account should be locked for 15 minutes, and an appropriate message indicating the lockout and duration should be displayed. Subsequent login attempts with the correct password while the account is locked should still result in a 'account locked' message.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright (UI interaction), Burp Suite/OWASP ZAP (network traffic inspection)",
+    "confidence": 1.0,
+    "compliance": [
+      "HIPAA Security - Technical Security Services",
+      "HIPAA Safeguards"
+    ]
+  },
+  {
+    "tc_id": "TC-ALERT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Secure and Minimal PHI Disclosure in Abnormal Vitals Email Alerts",
+    "preconditions": [
+      "An authorized nurse user is logged into MediTrack.",
+      "A patient is assigned to a doctor with a valid email address.",
+      "Email notification service is configured and operational."
+    ],
+    "steps": [
+      "Navigate to the patient vitals entry page for the assigned patient.",
+      "Enter vital signs that are outside the normal range (e.g., Heart Rate: 25 bpm, Temperature: 108 °F).",
+      "Save the vital entry.",
+      "Verify that a red warning icon appears next to the abnormal vitals on the UI.",
+      "Access the assigned doctor's email inbox.",
+      "Verify that an email alert for the abnormal vitals has been received.",
+      "Inspect the email content to ensure it contains only the necessary PHI (e.g., patient ID, specific abnormal vital, value, timestamp) and avoids excessive patient identifiers.",
+      "Verify the email transmission used a secure protocol (e.g., check email headers for TLS 1.2+).",
+      "Enter the same abnormal vital again for the same patient within a short timeframe (e.g., 5 minutes)."
+    ],
+    "expected": "A red warning icon is displayed next to the abnormal vitals. An email alert is sent to the assigned doctor, containing sufficient but minimal PHI. The email was transmitted over a secure connection (TLS 1.2+). No duplicate email alerts should be sent for the same abnormal vital entry within a short, defined period.",
+    "automatable": true,
+    "suggested_tool": "UI Automation (Selenium/Playwright), Email client automation/API, Network monitoring tools",
+    "confidence": 0.9,
+    "compliance": [
+      "HIPAA Minimum Necessary Rule",
+      "HIPAA Security - Technical Security Mechanisms",
+      "HIPAA Safeguards"
+    ]
+  },
+  {
+    "tc_id": "TC-VITAL-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Patient Vitals Data Validation and Secure PHI Storage",
+    "preconditions": [
+      "An authorized nurse user is logged into MediTrack.",
+      "A patient exists with a patient ID."
+    ],
+    "steps": [
+      "Navigate to the patient vitals entry page for a specific patient.",
+      "Attempt to enter a Heart Rate value outside the valid range (e.g., 20 bpm, 250 bpm).",
+      "Attempt to enter a Temperature value outside the valid range (e.g., 90 °F, 110 °F).",
+      "Attempt to enter non-numeric values for Heart Rate, Blood Pressure, or Temperature.",
+      "Enter valid vital signs (e.g., Heart Rate: 80 bpm, Blood Pressure: 120/80 mmHg, Temperature: 98.6 °F).",
+      "Save the valid vital entry.",
+      "Access the system's backend/database (with appropriate permissions) and verify the data is stored correctly along with the patient ID and a timestamp.",
+      "Verify that the stored patient vitals (PHI) are encrypted at rest."
+    ],
+    "expected": "The system should display an error message and prevent saving for invalid vital sign inputs (out of range or non-numeric). Valid vital signs should be successfully saved. Each vital entry must be associated with the correct patient ID and a timestamp. All stored patient vitals (PHI) in the database must be encrypted at rest (NFR-2).",
+    "automatable": true,
+    "suggested_tool": "UI Automation (Selenium/Playwright), Database inspection tools, API testing tools",
+    "confidence": 1.0,
+    "compliance": [
+      "HIPAA Safeguards",
+      "HIPAA Privacy - PHI definition",
+      "HIPAA Security - Technical Security Mechanisms"
+    ]
+  },
+  {
+    "tc_id": "TC-REPORT-001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify PDF Patient Health Report Generation with Accurate and Secured PHI",
+    "preconditions": [
+      "An authorized doctor user is logged into MediTrack.",
+      "Patient data and vital entries exist for a specific patient over a period."
+    ],
+    "steps": [
+      "Navigate to the patient reports section.",
+      "Select a patient for whom vital data exists.",
+      "Specify a date range for the report (e.g., last 30 days).",
+      "Initiate the report generation.",
+      "Download the generated report.",
+      "Open the downloaded PDF report.",
+      "Verify that the report contains the correct patient details (PHI) and all vitals recorded within the specified date range.",
+      "Confirm the report is in PDF format.",
+      "Assess the integrity and confidentiality of the PHI within the PDF (e.g., difficult to tamper, no unauthorized content, consider if watermarking or password protection is implemented for distribution).",
+      "Verify that filtering by date range functions correctly and only displays vitals within the selected period."
+    ],
+    "expected": "A PDF report should be generated and downloadable. The report must accurately display patient details and all vital signs recorded within the selected date range, in PDF format. The PHI within the report should be presented securely. Date range filtering should function as expected.",
+    "automatable": true,
+    "suggested_tool": "UI Automation (Selenium/Playwright), PDF content validation tools, Backend API testing for report generation logic",
+    "confidence": 0.9,
+    "compliance": [
+      "HIPAA Privacy - PHI definition",
+      "HIPAA Minimum Necessary Rule",
+      "HIPAA Safeguards",
+      "HIPAA Security - Technical Security Mechanisms"
+    ]
+  },
+  {
+    "tc_id": "TC-NFR-002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify Data Encryption for PHI at Rest and in Transit (TLS 1.2+)",
+    "preconditions": [
+      "The MediTrack system is deployed and running.",
+      "Patient data (PHI) has been entered and saved in the system."
+    ],
+    "steps": [
+      "Perform a user login to the MediTrack application.",
+      "Monitor network traffic (e.g., using a proxy tool like Burp Suite) during login, patient data entry, and data retrieval (e.g., viewing vitals, generating reports).",
+      "Verify that all data transmitted between the client and server is encrypted using TLS 1.2 or a higher version.",
+      "Access the MediTrack database server (with appropriate administrative permissions).",
+      "Inspect the database tables where patient vitals, patient IDs, and other individually identifiable health information (PHI) are stored.",
+      "Verify that patient vitals and other PHI are stored in an encrypted format within the database."
+    ],
+    "expected": "All network communication (login, data entry, data retrieval) for MediTrack must use HTTPS with TLS 1.2 or higher. Patient vitals, patient IDs, and all other PHI in the database must be stored in an encrypted state at rest.",
+    "automatable": false,
+    "suggested_tool": "Wireshark/Burp Suite (network traffic analysis), Database encryption validation tools (e.g., SQL Server TDE, Oracle Advanced Security)",
+    "confidence": 0.8,
+    "compliance": [
+      "HIPAA Security - Technical Security Services",
+      "HIPAA Security - Technical Security Mechanisms",
+      "HIPAA Safeguards"
+    ]
+  }
+]
+```

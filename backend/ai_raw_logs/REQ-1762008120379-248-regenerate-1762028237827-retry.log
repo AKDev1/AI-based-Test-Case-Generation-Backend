@@ -1,0 +1,126 @@
+```json
+[
+  {
+    "tc_id": "TC-AUTH-001",
+    "req_id": "FR-1.1",
+    "jira_id": "",
+    "title": "Verify successful login for an authorized doctor with valid credentials",
+    "preconditions": [
+      "A doctor account with a valid email and encrypted password exists in the MediTrack system.",
+      "The MediTrack application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter the valid doctor's email in the 'Email' field.",
+      "Enter the correct password in the 'Password' field.",
+      "Click the 'Login' button."
+    ],
+    "expected": "The system logs in the doctor successfully and redirects them to the main dashboard or home page. No error messages are displayed.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright",
+    "confidence": 0.95,
+    "compliance": ["HIPAA_V.A.1.a", "HIPAA_VI"]
+  },
+  {
+    "tc_id": "TC-AUTH-002",
+    "req_id": "FR-1.3",
+    "jira_id": "",
+    "title": "Verify account lockout mechanism after more than 5 failed login attempts",
+    "preconditions": [
+      "A doctor account with a valid email and password exists.",
+      "The MediTrack application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid doctor's email in the 'Email' field.",
+      "Enter an incorrect password in the 'Password' field.",
+      "Click the 'Login' button.",
+      "Repeat steps 2-4 five more times (total of 6 failed attempts).",
+      "Attempt to log in with the correct credentials after the lockout message appears.",
+      "Wait for 15 minutes, then attempt to log in with correct credentials."
+    ],
+    "expected": "After the 5th failed attempt, the system displays an error message indicating too many failed attempts and account lockout for 15 minutes. Subsequent login attempts with correct credentials during the lockout period are rejected. After 15 minutes, the account should automatically unlock, allowing successful login with correct credentials.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright with a timer function",
+    "confidence": 0.9,
+    "compliance": ["HIPAA_VI"]
+  },
+  {
+    "tc_id": "TC-VITALS-001",
+    "req_id": "FR-2.1, FR-2.2, FR-2.3",
+    "jira_id": "",
+    "title": "Verify authorized user can enter patient vitals within valid ranges and system rejects invalid entries",
+    "preconditions": [
+      "An authorized nurse or doctor is logged into the system.",
+      "A patient ID is available for vital entry.",
+      "The system has defined valid ranges for Heart Rate (30-200 bpm) and Temperature (95-107 °F)."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' page.",
+      "Enter a valid Patient ID.",
+      "Enter Heart Rate: 75 bpm (valid).",
+      "Enter Blood Pressure: 120/80 mmHg (assume valid).",
+      "Enter Temperature: 98.6 °F (valid).",
+      "Click 'Save'.",
+      "Attempt to enter Heart Rate: 25 bpm (invalid, below range).",
+      "Attempt to enter Temperature: 108 °F (invalid, above range).",
+      "Click 'Save' for the invalid entries."
+    ],
+    "expected": "For valid entries (steps 1-6): Vitals are successfully saved with a timestamp and patient ID, and a confirmation message is displayed. For invalid entries (steps 7-9): The system displays appropriate error messages for out-of-range values (e.g., 'Heart Rate must be between 30-200 bpm', 'Temperature must be between 95-107 °F') and prevents saving of the invalid data.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright",
+    "confidence": 0.9,
+    "compliance": ["HIPAA_V.A.1.a", "HIPAA_V.A.2", "HIPAA_M.3"]
+  },
+  {
+    "tc_id": "TC-ALERT-001",
+    "req_id": "FR-3.1, FR-3.2, FR-3.3",
+    "jira_id": "",
+    "title": "Verify abnormal vitals trigger a red warning icon and a unique email alert to the assigned doctor",
+    "preconditions": [
+      "An authorized nurse or doctor is logged into the system.",
+      "A patient is assigned to a doctor with a valid email address configured for alerts.",
+      "The system has predefined thresholds for abnormal vitals (e.g., Heart Rate > 100 bpm is abnormal).",
+      "The email notification service is configured and operational."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' page.",
+      "Enter a valid Patient ID.",
+      "Enter Heart Rate: 110 bpm (abnormal).",
+      "Enter Blood Pressure: 150/95 mmHg (abnormal).",
+      "Enter Temperature: 102 °F (abnormal).",
+      "Click 'Save'.",
+      "Immediately after, re-enter the exact same abnormal vitals for the same patient and save again."
+    ],
+    "expected": "After the first save (step 6): The saved abnormal vitals on the patient's record display a red warning icon. The assigned doctor receives a unique email alert containing the patient's abnormal vital signs and relevant details. After the second save (step 7): No duplicate email alert is sent for the same abnormal entry, but the red warning icon remains visible.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright (for UI) and an email testing/capture tool (for email verification)",
+    "confidence": 0.85,
+    "compliance": ["HIPAA_V.A.1.a", "HIPAA_V.A.2", "HIPAA_M.3", "HIPAA_VI"]
+  },
+  {
+    "tc_id": "TC-REPORT-001",
+    "req_id": "FR-4.1, FR-4.2, FR-4.3",
+    "jira_id": "",
+    "title": "Verify generation of a patient health report in PDF format with accurate details and date range filtering",
+    "preconditions": [
+      "An authorized nurse or doctor is logged into the system.",
+      "A patient has multiple vital entries recorded over a period (e.g., across several weeks/months).",
+      "The system has a functional PDF generation module."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Reports' section.",
+      "Select a specific Patient ID.",
+      "Specify a date range (e.g., '2025-09-01' to '2025-09-15').",
+      "Click the 'Generate Report' button.",
+      "Download the generated report file.",
+      "Open and review the downloaded PDF report."
+    ],
+    "expected": "The system generates and allows downloading of the report in PDF format. The PDF report includes the patient's demographic details and accurately lists all vital entries recorded for the selected patient only within the specified date range. The report is well-formatted and all data is consistent with the system's records. Vital entries outside the specified date range are not included.",
+    "automatable": true,
+    "suggested_tool": "Selenium/Playwright (for UI interaction and download), a PDF content validation library (e.g., Apache PDFBox for Java, PyPDF2 for Python) for content and format verification.",
+    "confidence": 0.8,
+    "compliance": ["HIPAA_V.A.1.a", "HIPAA_V.A.2", "HIPAA_M.3", "HIPAA_VI"]
+  }
+]
+```
