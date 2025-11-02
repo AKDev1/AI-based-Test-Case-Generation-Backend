@@ -1,0 +1,217 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TC_AUTH_001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify successful user login with valid credentials.",
+    "preconditions": [
+      "User account with valid email and password exists in the system.",
+      "MediTrack application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the 'Email' field.",
+      "Enter the corresponding valid password in the 'Password' field.",
+      "Click the 'Login' button."
+    ],
+    "expected": "User is successfully logged in and redirected to the dashboard/home page. The password entered is encrypted and not visible in plain text.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC_AUTH_002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify account lockout after multiple failed login attempts.",
+    "preconditions": [
+      "User account with valid email exists.",
+      "MediTrack application is accessible."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address.",
+      "Enter an incorrect password.",
+      "Click the 'Login' button.",
+      "Repeat steps 3-4 five times (total 6 failed attempts)."
+    ],
+    "expected": "After the 6th failed attempt, the system displays a message indicating the account is locked for 15 minutes. Subsequent login attempts within 15 minutes using correct credentials should fail, and the account should unlock after the 15-minute period.",
+    "automatable": true,
+    "suggested_tool": "Cypress",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC_VITALS_001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify successful entry and saving of patient vital signs within valid ranges.",
+    "preconditions": [
+      "Authorized user (doctor/nurse) is logged in.",
+      "An existing patient ID is available in the system."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section.",
+      "Select an existing Patient ID.",
+      "Enter a Heart Rate value within 30–200 bpm (e.g., 100).",
+      "Enter a Blood Pressure value (e.g., 120/80).",
+      "Enter a Temperature value within 95–107 °F (e.g., 98.6).",
+      "Click 'Save' or 'Submit' button."
+    ],
+    "expected": "The system accepts the vital signs, displays a success message, and saves the entry with the correct timestamp and Patient ID. The entered data should be retrievable from the patient's record.",
+    "automatable": true,
+    "suggested_tool": "Playwright, API Testing (e.g., Postman)",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC_VITALS_002",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify system rejects invalid patient vital signs and displays appropriate error messages.",
+    "preconditions": [
+      "Authorized user (doctor/nurse) is logged in.",
+      "An existing patient ID is available in the system."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section.",
+      "Select an existing Patient ID.",
+      "Enter an invalid Heart Rate value (e.g., 20 bpm, below 30 bpm).",
+      "Enter a valid Blood Pressure value (e.g., 120/80).",
+      "Enter an invalid Temperature value (e.g., 90 °F, below 95 °F).",
+      "Click 'Save' or 'Submit' button."
+    ],
+    "expected": "The system displays specific error messages for each vital sign entered outside its valid range (e.g., 'Heart Rate must be between 30 and 200 bpm', 'Temperature must be between 95 and 107 °F'). The vital signs entry should not be saved to the patient record.",
+    "automatable": true,
+    "suggested_tool": "Playwright, API Testing (e.g., Postman)",
+    "confidence": 1.0,
+    "compliance": ["hipaa"]
+  },
+  {
+    "tc_id": "TC_ALERT_001",
+    "req_id": "REQ-1762008120379-248",
+    "jira_id": "",
+    "title": "Verify red warning icon display and email alert for abnormal patient vitals, without duplication.",
+    "preconditions": [
+      "Authorized user (doctor/nurse) is logged in.",
+      "An existing patient ID is available with an assigned doctor.",
+      "The assigned doctor's email is correctly configured to receive alerts.",
+      "Abnormal vital thresholds are configured in the system (e.g., values outside normal ranges triggering an alert)."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section for a specific patient.",
+      "Enter vital signs that are classified as 'abnormal' (e.g., Heart Rate 25 bpm, Temperature 109 °F).",
+      "Save the vital entry.",
+      "Navigate to the patient's record view/dashboard to observe the vitals display.",
+      "Check the assigned doctor's email inbox for the alert.",
+      "Wait for a short period (e.g., 1 minute) and re-enter the exact same abnormal vitals for the same patient and save."
+    ],
+    "expected": "A red warning icon is displayed next to the abnormal vitals on the patient's record view. An email alert is sent to the assigned doctor for the first abnormal entry. Only one email alert is received for this specific abnormal entry, preventing duplicates.",
+    "automatable": true,
+    "suggested_tool": "Cypress (for UI), MailSlurp/Mailosaur (for email verification)",
+    "confidence": 0.9,
+    "compliance": ["hipaa"]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TC_AUTH_001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials.\",\n    \"preconditions\": [\n      \"User account with valid email and password exists in the system.\",\n      \"MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter the corresponding valid password in the 'Password' field.\",\n      \"Click the 'Login' button.\"\n    ],\n    \"expected\": \"User is successfully logged in and redirected to the dashboard/home page. The password entered is encrypted and not visible in plain text.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_AUTH_002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify account lockout after multiple failed login attempts.\",\n    \"preconditions\": [\n      \"User account with valid email exists.\",\n      \"MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address.\",\n      \"Enter an incorrect password.\",\n      \"Click the 'Login' button.\",\n      \"Repeat steps 3-4 five times (total 6 failed attempts).\"\n    ],\n    \"expected\": \"After the 6th failed attempt, the system displays a message indicating the account is locked for 15 minutes. Subsequent login attempts within 15 minutes using correct credentials should fail, and the account should unlock after the 15-minute period.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Cypress\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_VITALS_001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful entry and saving of patient vital signs within valid ranges.\",\n    \"preconditions\": [\n      \"Authorized user (doctor/nurse) is logged in.\",\n      \"An existing patient ID is available in the system.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select an existing Patient ID.\",\n      \"Enter a Heart Rate value within 30–200 bpm (e.g., 100).\",\n      \"Enter a Blood Pressure value (e.g., 120/80).\",\n      \"Enter a Temperature value within 95–107 °F (e.g., 98.6).\",\n      \"Click 'Save' or 'Submit' button.\"\n    ],\n    \"expected\": \"The system accepts the vital signs, displays a success message, and saves the entry with the correct timestamp and Patient ID. The entered data should be retrievable from the patient's record.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, API Testing (e.g., Postman)\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_VITALS_002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify system rejects invalid patient vital signs and displays appropriate error messages.\",\n    \"preconditions\": [\n      \"Authorized user (doctor/nurse) is logged in.\",\n      \"An existing patient ID is available in the system.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select an existing Patient ID.\",\n      \"Enter an invalid Heart Rate value (e.g., 20 bpm, below 30 bpm).\",\n      \"Enter a valid Blood Pressure value (e.g., 120/80).\",\n      \"Enter an invalid Temperature value (e.g., 90 °F, below 95 °F).\",\n      \"Click 'Save' or 'Submit' button.\"\n    ],\n    \"expected\": \"The system displays specific error messages for each vital sign entered outside its valid range (e.g., 'Heart Rate must be between 30 and 200 bpm', 'Temperature must be between 95 and 107 °F'). The vital signs entry should not be saved to the patient record.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, API Testing (e.g., Postman)\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify red warning icon display and email alert for abnormal patient vitals, without duplication.\",\n    \"preconditions\": [\n      \"Authorized user (doctor/nurse) is logged in.\",\n      \"An existing patient ID is available with an assigned doctor.\",\n      \"The assigned doctor's email is correctly configured to receive alerts.\",\n      \"Abnormal vital thresholds are configured in the system (e.g., values outside normal ranges triggering an alert).\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section for a specific patient.\",\n      \"Enter vital signs that are classified as 'abnormal' (e.g., Heart Rate 25 bpm, Temperature 109 °F).\",\n      \"Save the vital entry.\",\n      \"Navigate to the patient's record view/dashboard to observe the vitals display.\",\n      \"Check the assigned doctor's email inbox for the alert.\",\n      \"Wait for a short period (e.g., 1 minute) and re-enter the exact same abnormal vitals for the same patient and save.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal vitals on the patient's record view. An email alert is sent to the assigned doctor for the first abnormal entry. Only one email alert is received for this specific abnormal entry, preventing duplicates.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Cypress (for UI), MailSlurp/Mailosaur (for email verification)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 888,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 5428,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 16497,
+    "outputTokens": 1601,
+    "thoughtsTokens": 3407,
+    "totalTokens": 21505
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TC_AUTH_001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials.\",\n    \"preconditions\": [\n      \"User account with valid email and password exists in the system.\",\n      \"MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the 'Email' field.\",\n      \"Enter the corresponding valid password in the 'Password' field.\",\n      \"Click the 'Login' button.\"\n    ],\n    \"expected\": \"User is successfully logged in and redirected to the dashboard/home page. The password entered is encrypted and not visible in plain text.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_AUTH_002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify account lockout after multiple failed login attempts.\",\n    \"preconditions\": [\n      \"User account with valid email exists.\",\n      \"MediTrack application is accessible.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address.\",\n      \"Enter an incorrect password.\",\n      \"Click the 'Login' button.\",\n      \"Repeat steps 3-4 five times (total 6 failed attempts).\"\n    ],\n    \"expected\": \"After the 6th failed attempt, the system displays a message indicating the account is locked for 15 minutes. Subsequent login attempts within 15 minutes using correct credentials should fail, and the account should unlock after the 15-minute period.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Cypress\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_VITALS_001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful entry and saving of patient vital signs within valid ranges.\",\n    \"preconditions\": [\n      \"Authorized user (doctor/nurse) is logged in.\",\n      \"An existing patient ID is available in the system.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select an existing Patient ID.\",\n      \"Enter a Heart Rate value within 30–200 bpm (e.g., 100).\",\n      \"Enter a Blood Pressure value (e.g., 120/80).\",\n      \"Enter a Temperature value within 95–107 °F (e.g., 98.6).\",\n      \"Click 'Save' or 'Submit' button.\"\n    ],\n    \"expected\": \"The system accepts the vital signs, displays a success message, and saves the entry with the correct timestamp and Patient ID. The entered data should be retrievable from the patient's record.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, API Testing (e.g., Postman)\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_VITALS_002\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify system rejects invalid patient vital signs and displays appropriate error messages.\",\n    \"preconditions\": [\n      \"Authorized user (doctor/nurse) is logged in.\",\n      \"An existing patient ID is available in the system.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select an existing Patient ID.\",\n      \"Enter an invalid Heart Rate value (e.g., 20 bpm, below 30 bpm).\",\n      \"Enter a valid Blood Pressure value (e.g., 120/80).\",\n      \"Enter an invalid Temperature value (e.g., 90 °F, below 95 °F).\",\n      \"Click 'Save' or 'Submit' button.\"\n    ],\n    \"expected\": \"The system displays specific error messages for each vital sign entered outside its valid range (e.g., 'Heart Rate must be between 30 and 200 bpm', 'Temperature must be between 95 and 107 °F'). The vital signs entry should not be saved to the patient record.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Playwright, API Testing (e.g., Postman)\",\n    \"confidence\": 1.0,\n    \"compliance\": [\"hipaa\"]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_001\",\n    \"req_id\": \"REQ-1762008120379-248\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify red warning icon display and email alert for abnormal patient vitals, without duplication.\",\n    \"preconditions\": [\n      \"Authorized user (doctor/nurse) is logged in.\",\n      \"An existing patient ID is available with an assigned doctor.\",\n      \"The assigned doctor's email is correctly configured to receive alerts.\",\n      \"Abnormal vital thresholds are configured in the system (e.g., values outside normal ranges triggering an alert).\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section for a specific patient.\",\n      \"Enter vital signs that are classified as 'abnormal' (e.g., Heart Rate 25 bpm, Temperature 109 °F).\",\n      \"Save the vital entry.\",\n      \"Navigate to the patient's record view/dashboard to observe the vitals display.\",\n      \"Check the assigned doctor's email inbox for the alert.\",\n      \"Wait for a short period (e.g., 1 minute) and re-enter the exact same abnormal vitals for the same patient and save.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal vitals on the patient's record view. An email alert is sent to the assigned doctor for the first abnormal entry. Only one email alert is received for this specific abnormal entry, preventing duplicates.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Cypress (for UI), MailSlurp/Mailosaur (for email verification)\",\n    \"confidence\": 0.9,\n    \"compliance\": [\"hipaa\"]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 16497,
+      "candidatesTokenCount": 1601,
+      "totalTokenCount": 21505,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 243
+        },
+        {
+          "modality": "DOCUMENT",
+          "tokenCount": 16254
+        }
+      ],
+      "thoughtsTokenCount": 3407
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "xUUHaezAKNfag8UPqevAoAw"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide minimum 2 testcases. Decide the max number of testcases based on the size of the requirements. You are free to produce as many testcases as required. Use req_id: REQ-1762008120379-248.\n\nAdditional user instructions:\nGenerate 5 testcases not 6."
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1762008120379-248\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/kk8kj49bdjuc"
+            }
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/1ctqa4ucb92e"
+            }
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

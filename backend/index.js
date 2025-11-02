@@ -945,25 +945,45 @@ app.post("/requirements/:reqId/regenerate", authenticate, async (req, res) => {
       return res.status(500).json({ error: "AI did not return parseable JSON after retry. See server audit logs." });
     }
 
-    // Normalize and store
-    const normalized = parsed.map((t, idx) => normalizeTestcaseForStore(t, reqId));
-    const savedEntry = await GeneratedSet.create({
+    // Normalize and store (overwrite if a set already exists for this requirement)
+    const normalized = parsed.map((t) => normalizeTestcaseForStore(t, reqId));
+
+    // Try to find the latest existing generated set for this requirement
+    let savedEntry = await GeneratedSet.findOne({
       user: userId,
-      requirement: reqEntry._id,
       requirementId: reqEntry.reqId,
-      requirementTitle: reqEntry.title,
-      selectedStandards,
-      testcases: normalized,
-      promptOverride: promptOverride || undefined,
-    });
+    }).sort({ createdAt: -1 });
+
+    if (savedEntry) {
+      // OVERWRITE existing set
+      savedEntry.requirement = reqEntry._id;
+      savedEntry.requirementId = reqEntry.reqId;
+      savedEntry.requirementTitle = reqEntry.title;
+      savedEntry.selectedStandards = selectedStandards;
+      savedEntry.testcases = normalized;
+      savedEntry.promptOverride = promptOverride || undefined;
+      await savedEntry.save();
+    } else {
+      // Fallback: create if none exists
+      savedEntry = await GeneratedSet.create({
+        user: userId,
+        requirement: reqEntry._id,
+        requirementId: reqEntry.reqId,
+        requirementTitle: reqEntry.title,
+        selectedStandards,
+        testcases: normalized,
+        promptOverride: promptOverride || undefined,
+      });
+    }
 
     res.json({
       success: true,
-      genId: savedEntry._id.toString(),
+      genId: savedEntry._id.toString(), // stays the same when overwriting
       count: normalized.length,
       requirementId: reqId,
       requirementTitle: reqEntry.title,
     });
+
   } catch (err) {
     console.error("regenerate requirement testcases error:", err);
     res.status(500).json({ error: "Regeneration failed", details: String(err) });
