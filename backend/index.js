@@ -120,7 +120,7 @@ try {
       plugins: [
         googleAI({ apiKey: API_KEY })
       ],
-      model: googleAI.model("gemini-2.5-flash-lite", { temperature: 0.2 })
+      model: googleAI.model(process.env.GEMINI_MODEL, { temperature: 0.2 })
     });
     console.log("genkit initialized");
   } else {
@@ -461,7 +461,7 @@ app.post("/testcases", authenticate, async (req, res) => {
     // strict instruction (you can tweak wording)
     const defaultInstruction = `You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide 2-8 testcases. Use req_id provided.`;
 
-    const model = googleAI ? googleAI.model("gemini-2.5-flash-lite") : "gemini-2.5-flash-lite";
+    const model = googleAI ? googleAI.model(process.env.GEMINI_MODEL) : process.env.GEMINI_MODEL;
 
     for (const reqId of selectedRequirements) {
       const reqEntry = requirementsById.get(reqId);
@@ -669,7 +669,7 @@ app.post("/testcases/:genId/regenerate/:tcId", authenticate, async (req, res) =>
       }
     }
 
-    const model = googleAI ? googleAI.model("gemini-2.5-flash-lite") : "gemini-2.5-flash-lite";
+    const model = googleAI ? googleAI.model(process.env.GEMINI_MODEL) : process.env.GEMINI_MODEL;
 
     // Build comprehensive prompt with full context
     const baseInstruction = `You are a QA engineer. Regenerate and improve the testcase with ID "${tcId}" from the following context. Return ONLY a JSON object (no markdown, no extra text) with these exact fields:
@@ -861,7 +861,7 @@ app.post("/requirements/:reqId/regenerate", authenticate, async (req, res) => {
       standardsTexts.push({ name: short, text: txt });
     }
 
-    const model = googleAI ? googleAI.model("gemini-2.5-flash-lite") : "gemini-2.5-flash-lite";
+    const model = googleAI ? googleAI.model(process.env.GEMINI_MODEL) : process.env.GEMINI_MODEL;
 
     // Build instruction
     const defaultInstruction = `You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide minimum 2 testcases. Decide the max number of testcases based on the size of the requirements. You are free to produce as many testcases as required. Use req_id: ${reqId}.`;

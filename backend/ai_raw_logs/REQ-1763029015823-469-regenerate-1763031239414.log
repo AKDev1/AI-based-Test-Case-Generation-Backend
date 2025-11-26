@@ -1,0 +1,328 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TC_AUTH_001",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify successful user login with valid credentials",
+    "preconditions": [
+      "User has a valid email and password."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the email field.",
+      "Enter a valid password in the password field.",
+      "Click the 'Login' button."
+    ],
+    "expected": "The user is successfully logged into the MediTrack system and redirected to the dashboard.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.9,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_AUTH_002",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify failed login attempts lock account",
+    "preconditions": [
+      "User account is not currently locked."
+    ],
+    "steps": [
+      "Navigate to the MediTrack login page.",
+      "Enter a valid email address in the email field.",
+      "Enter an incorrect password in the password field.",
+      "Click the 'Login' button.",
+      "Repeat steps 2-4 for a total of 6 attempts."
+    ],
+    "expected": "After the 6th failed login attempt, the account is locked for 15 minutes, and an appropriate message is displayed.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.85,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_VITAL_001",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify successful entry of patient vital signs",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "A patient record exists."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section.",
+      "Select a patient record.",
+      "Enter a valid Heart Rate value (e.g., 75 bpm).",
+      "Enter a valid Blood Pressure value (e.g., 120/80 mmHg).",
+      "Enter a valid Temperature value (e.g., 98.6 °F).",
+      "Click the 'Save' button."
+    ],
+    "expected": "The vital signs are saved successfully, and a confirmation message is displayed. The entry includes a timestamp and the correct patient ID.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.9,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_VITAL_002",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify validation of abnormal heart rate input",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "A patient record exists."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section.",
+      "Select a patient record.",
+      "Enter an invalid Heart Rate value (e.g., 250 bpm).",
+      "Attempt to save the entry."
+    ],
+    "expected": "An error message is displayed indicating the heart rate is out of the acceptable range (30-200 bpm). The entry is not saved.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.85,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_VITAL_003",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify validation of out-of-range temperature input",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "A patient record exists."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Vitals Entry' section.",
+      "Select a patient record.",
+      "Enter an invalid Temperature value (e.g., 110 °F).",
+      "Attempt to save the entry."
+    ],
+    "expected": "An error message is displayed indicating the temperature is out of the acceptable range (95-107 °F). The entry is not saved.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.85,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_ALERT_001",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify abnormal vital sign displays red warning icon",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "A patient record with a vital sign outside the normal range exists."
+    ],
+    "steps": [
+      "Navigate to the patient's record that has an abnormal vital sign.",
+      "Observe the vital signs display."
+    ],
+    "expected": "A red warning icon is displayed next to the abnormal vital sign (e.g., abnormal Heart Rate).",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.9,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_ALERT_002",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify email alert is sent for abnormal vital entry",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "A patient record with an assigned doctor exists.",
+      "The patient record contains an abnormal vital sign."
+    ],
+    "steps": [
+      "Ensure a vital sign entry is made that triggers an abnormal alert.",
+      "Check the email inbox of the assigned doctor."
+    ],
+    "expected": "An email alert is sent to the assigned doctor regarding the abnormal vital entry.",
+    "automatable": true,
+    "suggested_tool": "Mailosaur or similar email testing tool",
+    "confidence": 0.8,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_ALERT_003",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify no duplicate alerts for abnormal vital entries",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "A patient record with an abnormal vital sign exists."
+    ],
+    "steps": [
+      "Enter an abnormal vital sign for a patient.",
+      "Observe the alert generation process.",
+      "Re-enter the same abnormal vital sign for the same patient."
+    ],
+    "expected": "An alert is triggered and an email is sent only once for the initial abnormal entry. No duplicate alerts or emails are generated for subsequent identical entries.",
+    "automatable": true,
+    "suggested_tool": "Mailosaur or similar email testing tool, Selenium WebDriver",
+    "confidence": 0.85,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_REPORT_001",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify generation of patient health report in PDF format",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "There are recorded vital signs for a patient within a specified date range."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Health Report Generation' section.",
+      "Select a patient.",
+      "Specify a date range for which data exists.",
+      "Click the 'Generate Report' button."
+    ],
+    "expected": "A downloadable report is generated in PDF format. The report includes patient details and all recorded vital signs within the specified date range.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.9,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC_REPORT_002",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify filtering of patient health reports by date range",
+    "preconditions": [
+      "User is logged into the MediTrack system.",
+      "There are recorded vital signs for a patient across multiple date ranges."
+    ],
+    "steps": [
+      "Navigate to the 'Patient Health Report Generation' section.",
+      "Select a patient.",
+      "Specify a specific date range (e.g., a single day).",
+      "Click the 'Generate Report' button."
+    ],
+    "expected": "The generated report contains only the vital signs and patient details for the specified date range.",
+    "automatable": true,
+    "suggested_tool": "Selenium WebDriver",
+    "confidence": 0.9,
+    "compliance": [
+      "hipaa"
+    ]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TC_AUTH_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials\",\n    \"preconditions\": [\n      \"User has a valid email and password.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the email field.\",\n      \"Enter a valid password in the password field.\",\n      \"Click the 'Login' button.\"\n    ],\n    \"expected\": \"The user is successfully logged into the MediTrack system and redirected to the dashboard.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_AUTH_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify failed login attempts lock account\",\n    \"preconditions\": [\n      \"User account is not currently locked.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the email field.\",\n      \"Enter an incorrect password in the password field.\",\n      \"Click the 'Login' button.\",\n      \"Repeat steps 2-4 for a total of 6 attempts.\"\n    ],\n    \"expected\": \"After the 6th failed login attempt, the account is locked for 15 minutes, and an appropriate message is displayed.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_VITAL_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful entry of patient vital signs\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select a patient record.\",\n      \"Enter a valid Heart Rate value (e.g., 75 bpm).\",\n      \"Enter a valid Blood Pressure value (e.g., 120/80 mmHg).\",\n      \"Enter a valid Temperature value (e.g., 98.6 °F).\",\n      \"Click the 'Save' button.\"\n    ],\n    \"expected\": \"The vital signs are saved successfully, and a confirmation message is displayed. The entry includes a timestamp and the correct patient ID.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_VITAL_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify validation of abnormal heart rate input\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select a patient record.\",\n      \"Enter an invalid Heart Rate value (e.g., 250 bpm).\",\n      \"Attempt to save the entry.\"\n    ],\n    \"expected\": \"An error message is displayed indicating the heart rate is out of the acceptable range (30-200 bpm). The entry is not saved.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_VITAL_003\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify validation of out-of-range temperature input\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select a patient record.\",\n      \"Enter an invalid Temperature value (e.g., 110 °F).\",\n      \"Attempt to save the entry.\"\n    ],\n    \"expected\": \"An error message is displayed indicating the temperature is out of the acceptable range (95-107 °F). The entry is not saved.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify abnormal vital sign displays red warning icon\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record with a vital sign outside the normal range exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the patient's record that has an abnormal vital sign.\",\n      \"Observe the vital signs display.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal vital sign (e.g., abnormal Heart Rate).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify email alert is sent for abnormal vital entry\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record with an assigned doctor exists.\",\n      \"The patient record contains an abnormal vital sign.\"\n    ],\n    \"steps\": [\n      \"Ensure a vital sign entry is made that triggers an abnormal alert.\",\n      \"Check the email inbox of the assigned doctor.\"\n    ],\n    \"expected\": \"An email alert is sent to the assigned doctor regarding the abnormal vital entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Mailosaur or similar email testing tool\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_003\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify no duplicate alerts for abnormal vital entries\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record with an abnormal vital sign exists.\"\n    ],\n    \"steps\": [\n      \"Enter an abnormal vital sign for a patient.\",\n      \"Observe the alert generation process.\",\n      \"Re-enter the same abnormal vital sign for the same patient.\"\n    ],\n    \"expected\": \"An alert is triggered and an email is sent only once for the initial abnormal entry. No duplicate alerts or emails are generated for subsequent identical entries.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Mailosaur or similar email testing tool, Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_REPORT_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify generation of patient health report in PDF format\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"There are recorded vital signs for a patient within a specified date range.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Health Report Generation' section.\",\n      \"Select a patient.\",\n      \"Specify a date range for which data exists.\",\n      \"Click the 'Generate Report' button.\"\n    ],\n    \"expected\": \"A downloadable report is generated in PDF format. The report includes patient details and all recorded vital signs within the specified date range.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_REPORT_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify filtering of patient health reports by date range\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"There are recorded vital signs for a patient across multiple date ranges.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Health Report Generation' section.\",\n      \"Select a patient.\",\n      \"Specify a specific date range (e.g., a single day).\",\n      \"Click the 'Generate Report' button.\"\n    ],\n    \"expected\": \"The generated report contains only the vital signs and patient details for the specified date range.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 882,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 7860,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 16496,
+    "outputTokens": 2411,
+    "totalTokens": 18907
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TC_AUTH_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful user login with valid credentials\",\n    \"preconditions\": [\n      \"User has a valid email and password.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the email field.\",\n      \"Enter a valid password in the password field.\",\n      \"Click the 'Login' button.\"\n    ],\n    \"expected\": \"The user is successfully logged into the MediTrack system and redirected to the dashboard.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_AUTH_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify failed login attempts lock account\",\n    \"preconditions\": [\n      \"User account is not currently locked.\"\n    ],\n    \"steps\": [\n      \"Navigate to the MediTrack login page.\",\n      \"Enter a valid email address in the email field.\",\n      \"Enter an incorrect password in the password field.\",\n      \"Click the 'Login' button.\",\n      \"Repeat steps 2-4 for a total of 6 attempts.\"\n    ],\n    \"expected\": \"After the 6th failed login attempt, the account is locked for 15 minutes, and an appropriate message is displayed.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_VITAL_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify successful entry of patient vital signs\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select a patient record.\",\n      \"Enter a valid Heart Rate value (e.g., 75 bpm).\",\n      \"Enter a valid Blood Pressure value (e.g., 120/80 mmHg).\",\n      \"Enter a valid Temperature value (e.g., 98.6 °F).\",\n      \"Click the 'Save' button.\"\n    ],\n    \"expected\": \"The vital signs are saved successfully, and a confirmation message is displayed. The entry includes a timestamp and the correct patient ID.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_VITAL_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify validation of abnormal heart rate input\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select a patient record.\",\n      \"Enter an invalid Heart Rate value (e.g., 250 bpm).\",\n      \"Attempt to save the entry.\"\n    ],\n    \"expected\": \"An error message is displayed indicating the heart rate is out of the acceptable range (30-200 bpm). The entry is not saved.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_VITAL_003\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify validation of out-of-range temperature input\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Vitals Entry' section.\",\n      \"Select a patient record.\",\n      \"Enter an invalid Temperature value (e.g., 110 °F).\",\n      \"Attempt to save the entry.\"\n    ],\n    \"expected\": \"An error message is displayed indicating the temperature is out of the acceptable range (95-107 °F). The entry is not saved.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify abnormal vital sign displays red warning icon\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record with a vital sign outside the normal range exists.\"\n    ],\n    \"steps\": [\n      \"Navigate to the patient's record that has an abnormal vital sign.\",\n      \"Observe the vital signs display.\"\n    ],\n    \"expected\": \"A red warning icon is displayed next to the abnormal vital sign (e.g., abnormal Heart Rate).\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify email alert is sent for abnormal vital entry\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record with an assigned doctor exists.\",\n      \"The patient record contains an abnormal vital sign.\"\n    ],\n    \"steps\": [\n      \"Ensure a vital sign entry is made that triggers an abnormal alert.\",\n      \"Check the email inbox of the assigned doctor.\"\n    ],\n    \"expected\": \"An email alert is sent to the assigned doctor regarding the abnormal vital entry.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Mailosaur or similar email testing tool\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_ALERT_003\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify no duplicate alerts for abnormal vital entries\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"A patient record with an abnormal vital sign exists.\"\n    ],\n    \"steps\": [\n      \"Enter an abnormal vital sign for a patient.\",\n      \"Observe the alert generation process.\",\n      \"Re-enter the same abnormal vital sign for the same patient.\"\n    ],\n    \"expected\": \"An alert is triggered and an email is sent only once for the initial abnormal entry. No duplicate alerts or emails are generated for subsequent identical entries.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Mailosaur or similar email testing tool, Selenium WebDriver\",\n    \"confidence\": 0.85,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_REPORT_001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify generation of patient health report in PDF format\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"There are recorded vital signs for a patient within a specified date range.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Health Report Generation' section.\",\n      \"Select a patient.\",\n      \"Specify a date range for which data exists.\",\n      \"Click the 'Generate Report' button.\"\n    ],\n    \"expected\": \"A downloadable report is generated in PDF format. The report includes patient details and all recorded vital signs within the specified date range.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC_REPORT_002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify filtering of patient health reports by date range\",\n    \"preconditions\": [\n      \"User is logged into the MediTrack system.\",\n      \"There are recorded vital signs for a patient across multiple date ranges.\"\n    ],\n    \"steps\": [\n      \"Navigate to the 'Patient Health Report Generation' section.\",\n      \"Select a patient.\",\n      \"Specify a specific date range (e.g., a single day).\",\n      \"Click the 'Generate Report' button.\"\n    ],\n    \"expected\": \"The generated report contains only the vital signs and patient details for the specified date range.\",\n    \"automatable\": true,\n    \"suggested_tool\": \"Selenium WebDriver\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 16496,
+      "candidatesTokenCount": 2411,
+      "totalTokenCount": 18907,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 242
+        },
+        {
+          "modality": "DOCUMENT",
+          "tokenCount": 16254
+        }
+      ]
+    },
+    "modelVersion": "gemini-2.5-flash-lite",
+    "responseId": "x7gVabWsKKiE4-EP1sKB4A0"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide minimum 2 testcases. Decide the max number of testcases based on the size of the requirements. You are free to produce as many testcases as required. Use req_id: REQ-1763029015823-469.\n\nAdditional user instructions:\ngive me 10 terstcases"
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1763029015823-469\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/wpdkdsctc48y"
+            }
+          },
+          {
+            "media": {
+              "contentType": "application/pdf",
+              "url": "https://generativelanguage.googleapis.com/v1beta/files/gn1yl6dhy29t"
+            }
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}

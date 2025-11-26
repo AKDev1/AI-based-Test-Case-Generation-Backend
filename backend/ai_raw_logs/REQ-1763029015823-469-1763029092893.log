@@ -1,0 +1,209 @@
+--- RAW RESPONSE ---
+[
+  {
+    "tc_id": "TC-REQ-1763029015823-469-001",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify presence and completeness of requirement text",
+    "preconditions": [],
+    "steps": [
+      "1. Access requirement REQ-1763029015823-469.",
+      "2. Locate the 'Requirement text' section."
+    ],
+    "expected": "The 'Requirement text' section contains detailed, clear, and unambiguous functional or non-functional specification content, sufficient for development and testing.",
+    "automatable": false,
+    "suggested_tool": "Manual review",
+    "confidence": 0.9,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1763029015823-469-002",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Validate requirement testability for 'MediTrack sample requirement'",
+    "preconditions": [
+      "Requirement REQ-1763029015823-469 has defined functional text."
+    ],
+    "steps": [
+      "1. Examine the defined requirement text of REQ-1763029015823-469 for quantifiable and verifiable statements.",
+      "2. Assess if clear success criteria and test cases can be derived from the text."
+    ],
+    "expected": "The requirement text is written in a manner that allows for the creation of specific, measurable, achievable, relevant, and time-bound test cases.",
+    "automatable": false,
+    "suggested_tool": "Manual review",
+    "confidence": 0.8,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1763029015823-469-003",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify requirement traceability links",
+    "preconditions": [
+      "Requirement REQ-1763029015823-469 has defined functional text."
+    ],
+    "steps": [
+      "1. Review requirement REQ-1763029015823-469 and its associated documentation.",
+      "2. Verify if links to parent/child requirements, design documents, or other relevant artifacts are present."
+    ],
+    "expected": "The requirement contains clear and valid traceability links to related documentation or system components.",
+    "automatable": false,
+    "suggested_tool": "Requirements Management System",
+    "confidence": 0.8,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1763029015823-469-004",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Assess HIPAA implications and references in requirement text",
+    "preconditions": [
+      "Requirement REQ-1763029015823-469 has defined functional text."
+    ],
+    "steps": [
+      "1. Review the defined requirement text of REQ-1763029015823-469.",
+      "2. Identify any elements that pertain to Protected Health Information (PHI) handling, privacy, or security.",
+      "3. Verify explicit mention or clear implication of HIPAA compliance measures relevant to the requirement."
+    ],
+    "expected": "The requirement text clearly outlines or implies adherence to relevant HIPAA regulations for PHI handling, privacy, and security aspects it addresses.",
+    "automatable": false,
+    "suggested_tool": "Manual review by Compliance Officer",
+    "confidence": 0.7,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1763029015823-469-005",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify non-functional requirements for security in 'MediTrack sample requirement'",
+    "preconditions": [
+      "Requirement REQ-1763029015823-469 has defined functional text."
+    ],
+    "steps": [
+      "1. Review the defined requirement text of REQ-1763029015823-469 for non-functional aspects related to security.",
+      "2. Confirm that security measures appropriate for regulated healthcare software are mentioned or referenced."
+    ],
+    "expected": "The requirement includes or references adequate non-functional requirements to ensure the security of data, particularly sensitive health information, compliant with HIPAA.",
+    "automatable": false,
+    "suggested_tool": "Manual review",
+    "confidence": 0.7,
+    "compliance": [
+      "hipaa"
+    ]
+  },
+  {
+    "tc_id": "TC-REQ-1763029015823-469-006",
+    "req_id": "REQ-1763029015823-469",
+    "jira_id": "",
+    "title": "Verify non-functional requirements for privacy in 'MediTrack sample requirement'",
+    "preconditions": [
+      "Requirement REQ-1763029015823-469 has defined functional text."
+    ],
+    "steps": [
+      "1. Review the defined requirement text of REQ-1763029015823-469 for non-functional aspects related to privacy.",
+      "2. Confirm that privacy controls appropriate for regulated healthcare software are mentioned or referenced."
+    ],
+    "expected": "The requirement includes or references adequate non-functional requirements to ensure patient data privacy, in line with HIPAA regulations.",
+    "automatable": false,
+    "suggested_tool": "Manual review",
+    "confidence": 0.7,
+    "compliance": [
+      "hipaa"
+    ]
+  }
+]
+
+--- FULL GEN RESP ---
+{
+  "message": {
+    "role": "model",
+    "content": [
+      {
+        "text": "[\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify presence and completeness of requirement text\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"1. Access requirement REQ-1763029015823-469.\",\n      \"2. Locate the 'Requirement text' section.\"\n    ],\n    \"expected\": \"The 'Requirement text' section contains detailed, clear, and unambiguous functional or non-functional specification content, sufficient for development and testing.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Validate requirement testability for 'MediTrack sample requirement'\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Examine the defined requirement text of REQ-1763029015823-469 for quantifiable and verifiable statements.\",\n      \"2. Assess if clear success criteria and test cases can be derived from the text.\"\n    ],\n    \"expected\": \"The requirement text is written in a manner that allows for the creation of specific, measurable, achievable, relevant, and time-bound test cases.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-003\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify requirement traceability links\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review requirement REQ-1763029015823-469 and its associated documentation.\",\n      \"2. Verify if links to parent/child requirements, design documents, or other relevant artifacts are present.\"\n    ],\n    \"expected\": \"The requirement contains clear and valid traceability links to related documentation or system components.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Requirements Management System\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-004\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Assess HIPAA implications and references in requirement text\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review the defined requirement text of REQ-1763029015823-469.\",\n      \"2. Identify any elements that pertain to Protected Health Information (PHI) handling, privacy, or security.\",\n      \"3. Verify explicit mention or clear implication of HIPAA compliance measures relevant to the requirement.\"\n    ],\n    \"expected\": \"The requirement text clearly outlines or implies adherence to relevant HIPAA regulations for PHI handling, privacy, and security aspects it addresses.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review by Compliance Officer\",\n    \"confidence\": 0.7,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-005\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify non-functional requirements for security in 'MediTrack sample requirement'\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review the defined requirement text of REQ-1763029015823-469 for non-functional aspects related to security.\",\n      \"2. Confirm that security measures appropriate for regulated healthcare software are mentioned or referenced.\"\n    ],\n    \"expected\": \"The requirement includes or references adequate non-functional requirements to ensure the security of data, particularly sensitive health information, compliant with HIPAA.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.7,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-006\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify non-functional requirements for privacy in 'MediTrack sample requirement'\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review the defined requirement text of REQ-1763029015823-469 for non-functional aspects related to privacy.\",\n      \"2. Confirm that privacy controls appropriate for regulated healthcare software are mentioned or referenced.\"\n    ],\n    \"expected\": \"The requirement includes or references adequate non-functional requirements to ensure patient data privacy, in line with HIPAA regulations.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.7,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]"
+      }
+    ]
+  },
+  "finishReason": "stop",
+  "usage": {
+    "inputCharacters": 730,
+    "inputImages": 0,
+    "inputVideos": 0,
+    "inputAudioFiles": 0,
+    "outputCharacters": 4912,
+    "outputImages": 0,
+    "outputVideos": 0,
+    "outputAudioFiles": 0,
+    "inputTokens": 194,
+    "outputTokens": 1614,
+    "thoughtsTokens": 4983,
+    "totalTokens": 6791
+  },
+  "custom": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "[\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-001\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify presence and completeness of requirement text\",\n    \"preconditions\": [],\n    \"steps\": [\n      \"1. Access requirement REQ-1763029015823-469.\",\n      \"2. Locate the 'Requirement text' section.\"\n    ],\n    \"expected\": \"The 'Requirement text' section contains detailed, clear, and unambiguous functional or non-functional specification content, sufficient for development and testing.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.9,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-002\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Validate requirement testability for 'MediTrack sample requirement'\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Examine the defined requirement text of REQ-1763029015823-469 for quantifiable and verifiable statements.\",\n      \"2. Assess if clear success criteria and test cases can be derived from the text.\"\n    ],\n    \"expected\": \"The requirement text is written in a manner that allows for the creation of specific, measurable, achievable, relevant, and time-bound test cases.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-003\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify requirement traceability links\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review requirement REQ-1763029015823-469 and its associated documentation.\",\n      \"2. Verify if links to parent/child requirements, design documents, or other relevant artifacts are present.\"\n    ],\n    \"expected\": \"The requirement contains clear and valid traceability links to related documentation or system components.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Requirements Management System\",\n    \"confidence\": 0.8,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-004\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Assess HIPAA implications and references in requirement text\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review the defined requirement text of REQ-1763029015823-469.\",\n      \"2. Identify any elements that pertain to Protected Health Information (PHI) handling, privacy, or security.\",\n      \"3. Verify explicit mention or clear implication of HIPAA compliance measures relevant to the requirement.\"\n    ],\n    \"expected\": \"The requirement text clearly outlines or implies adherence to relevant HIPAA regulations for PHI handling, privacy, and security aspects it addresses.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review by Compliance Officer\",\n    \"confidence\": 0.7,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-005\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify non-functional requirements for security in 'MediTrack sample requirement'\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review the defined requirement text of REQ-1763029015823-469 for non-functional aspects related to security.\",\n      \"2. Confirm that security measures appropriate for regulated healthcare software are mentioned or referenced.\"\n    ],\n    \"expected\": \"The requirement includes or references adequate non-functional requirements to ensure the security of data, particularly sensitive health information, compliant with HIPAA.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.7,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  },\n  {\n    \"tc_id\": \"TC-REQ-1763029015823-469-006\",\n    \"req_id\": \"REQ-1763029015823-469\",\n    \"jira_id\": \"\",\n    \"title\": \"Verify non-functional requirements for privacy in 'MediTrack sample requirement'\",\n    \"preconditions\": [\n      \"Requirement REQ-1763029015823-469 has defined functional text.\"\n    ],\n    \"steps\": [\n      \"1. Review the defined requirement text of REQ-1763029015823-469 for non-functional aspects related to privacy.\",\n      \"2. Confirm that privacy controls appropriate for regulated healthcare software are mentioned or referenced.\"\n    ],\n    \"expected\": \"The requirement includes or references adequate non-functional requirements to ensure patient data privacy, in line with HIPAA regulations.\",\n    \"automatable\": false,\n    \"suggested_tool\": \"Manual review\",\n    \"confidence\": 0.7,\n    \"compliance\": [\n      \"hipaa\"\n    ]\n  }\n]"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 194,
+      "candidatesTokenCount": 1614,
+      "totalTokenCount": 6791,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 194
+        }
+      ],
+      "thoughtsTokenCount": 4983
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "ZbAVabysAtuy4-EPl-WM6AE"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "text": "You are a senior QA engineer for regulated healthcare software. Using ONLY the extracted text blocks provided below, return EXACTLY a JSON array (no commentary, no markdown) of testcases. Each testcase must have these fields: tc_id, req_id, jira_id (empty string), title, preconditions (array), steps (array), expected (string), automatable (boolean), suggested_tool (string), confidence (float 0-1), compliance (array). Provide 2-8 testcases. Use req_id provided."
+          },
+          {
+            "text": "Additional user instructions:\ngive me 10 testcases"
+          },
+          {
+            "text": "Requirement metadata:\nreq_id: REQ-1763029015823-469\ntitle: MediTrack sample requirement\n\nRequirement text:\n<no extracted text>\n"
+          },
+          {
+            "text": "Standards list: hipaa.pdf"
+          },
+          {
+            "text": "Standard: hipaa\n\n<no extracted text>\n"
+          },
+          {
+            "text": "Return ONLY the JSON array."
+          }
+        ]
+      }
+    ],
+    "config": {},
+    "tools": [],
+    "output": {}
+  }
+}
